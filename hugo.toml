@@ -1,0 +1,44 @@
+baseURL = "https://ajoshi.dev/"
+languageCode = "en-us"
+title = "Atharva CJ's place"
+theme = "github-style"
+pygmentsCodeFences = true
+pygmentsUseClasses = true
+
+[params]
+  author = "toothsy"
+  description = "If that is our will, who dares to stop us?"
+  github = "toothsy"
+  tumblr = "dootdootdootdootdootdootdoot"
+  email = "c.j.atharva@gmail.com"
+  keywords = "blog, google analytics"
+  rss = true
+  lastmod = false
+  favicon = "/images/github-mark.png"
+  avatar = "/images/thorfinn.jpeg"
+  headerIcon = "/images/github-mark-white.png"
+  location = "India"
+  userStatusEmoji = "😁"
+  enableGitalk = false
+  enableSearch = false
+  bluesky = "cjatharva.bsky.social"
+
+  [params.gitalk]
+    clientID = "Your client ID" # Your client ID
+    clientSecret = "Your client secret" # Your client secret
+    repo = "LuvSia" # 您的博客的github地址Repository name，例如：xxxx.github.io
+    owner = "ventusoon" # 您的GitHub ID
+    admin = "ventusoon" # 您的GitHub ID
+    id = "location.pathname" # 文章页面的链接地址就是ID
+    labels = "gitalk" # Github issue labels. If you used to use Gitment, you can change it
+    perPage = 15 # Pagination size, with maximum 100.
+    pagerDirection = "last" # Comment sorting direction, available values are 'last' and 'first'.
+    createIssueManually = true # 设置为true，如果是管理员登录，会自动创建issue，如果是false，需要管理员手动添加第一个评论(issue)
+    distractionFreeMode = false # Enable hot key (cmd|ctrl + enter) submit comment.
+    proxy = "https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token" # 可以自行添加反向代理
+
+
+[frontmatter]
+  lastmod = ["lastmod", ":fileModTime", ":default"]
+
+
