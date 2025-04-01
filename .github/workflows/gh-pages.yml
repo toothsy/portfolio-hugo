@@ -27,6 +27,9 @@ jobs:
       - name: Build
         run: hugo
 
+      - name: Create CNAME File
+        run: echo "acjoshi.dev" > ./public/CNAME
+
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v4
         # If you're changing the branch from main,
