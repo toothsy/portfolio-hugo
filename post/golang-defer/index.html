@@ -1,9 +1,310 @@
-<!doctype html><html lang=en-us><head><meta charset=utf-8><meta name=viewport content="width=device-width"><script type=application/javascript src=https://ajoshi.dev/js/theme-mode.js></script><link rel=stylesheet href=https://ajoshi.dev/css/frameworks.min.css><link rel=stylesheet href=https://ajoshi.dev/css/github.min.css><link rel=stylesheet href=https://ajoshi.dev/css/github-style.css><link rel=stylesheet href=https://ajoshi.dev/css/light.css><link rel=stylesheet href=https://ajoshi.dev/css/dark.css><link rel=stylesheet href=https://ajoshi.dev/css/syntax.css><title>Golang Defer - Atharva CJ's place</title>
-<link rel=icon type=image/x-icon href=/images/github-mark.png><meta name=theme-color content="#1e2327"><meta name=description content="Defer And Closure in Go-lang Hello, fellow internet user, before we begin, this article assumes you have the following pre-requisites:
-You know about functions in Go Have an understanding of the local and global scope Have your VS Code setup for Go-lang, because it&rsquo;ll be a delightful experience with autocomplete, linting, and auto-imports With that out of the way, onto the main issue at hand, young padawan. "><meta name=keywords content='blog,google analytics'><meta name=robots content="noodp"><link rel=canonical href=https://ajoshi.dev/post/golang-defer/><meta name=twitter:card content="summary"><meta name=twitter:title content="Golang Defer - Atharva CJ's place"><meta name=twitter:description content="Defer And Closure in Go-lang Hello, fellow internet user, before we begin, this article assumes you have the following pre-requisites:
-You know about functions in Go Have an understanding of the local and global scope Have your VS Code setup for Go-lang, because it&rsquo;ll be a delightful experience with autocomplete, linting, and auto-imports With that out of the way, onto the main issue at hand, young padawan. "><meta name=twitter:site content="https://ajoshi.dev/"><meta name=twitter:creator content><meta name=twitter:image content="https://ajoshi.dev/"><meta property="og:type" content="article"><meta property="og:title" content="Golang Defer - Atharva CJ's place"><meta property="og:description" content="Defer And Closure in Go-lang Hello, fellow internet user, before we begin, this article assumes you have the following pre-requisites:
-You know about functions in Go Have an understanding of the local and global scope Have your VS Code setup for Go-lang, because it&rsquo;ll be a delightful experience with autocomplete, linting, and auto-imports With that out of the way, onto the main issue at hand, young padawan. "><meta property="og:url" content="https://ajoshi.dev/post/golang-defer/"><meta property="og:site_name" content="Golang Defer"><meta property="og:image" content="https://ajoshi.dev/"><meta property="og:image:width" content="2048"><meta property="og:image:height" content="1024"><meta property="article:published_time" content="2025-03-29 17:17:21 +0530 +0530"></head><body><div style=position:relative><header class="Header js-details-container Details px-3 px-md-4 px-lg-5 flex-wrap flex-md-nowrap open Details--on"><div class="Header-item mobile-none" style=margin-top:-4px;margin-bottom:-4px><a class=Header-link href=https://ajoshi.dev/><img class=octicon height=32 width=32 src=/images/github-mark-white.png></a></div><div class="Header-item d-md-none"><button class="Header-link btn-link js-details-target" type=button onclick='document.querySelector("#header-search").style.display=document.querySelector("#header-search").style.display=="none"?"block":"none"'><svg height="24" class="octicon octicon-three-bars" viewBox="0 0 16 16" width="24"><path fill-rule="evenodd" d="M1 2.75A.75.75.0 011.75 2h12.5a.75.75.0 110 1.5H1.75A.75.75.0 011 2.75zm0 5A.75.75.0 011.75 7h12.5a.75.75.0 110 1.5H1.75A.75.75.0 011 7.75zM1.75 12a.75.75.0 100 1.5h12.5a.75.75.0 100-1.5H1.75z"/></svg></button></div><div style=display:none id=header-search class="Header-item Header-item--full flex-column flex-md-row width-full flex-order-2 flex-md-order-none mr-0 mr-md-3 mt-3 mt-md-0 Details-content--hidden-not-important d-md-flex"><div class="Header-search header-search flex-auto js-site-search position-relative flex-self-stretch flex-md-self-auto mb-3 mb-md-0 mr-0 mr-md-3 scoped-search site-scoped-search js-jump-to"><div class=position-relative><form target=_blank action=https://www.google.com/search accept-charset=UTF-8 method=get autocomplete=off><label class="Header-search-label form-control input-sm header-search-wrapper p-0 js-chromeless-input-container header-search-wrapper-jump-to position-relative d-flex flex-justify-between flex-items-center"><input type=text class="Header-search-input form-control input-sm header-search-input jump-to-field js-jump-to-field js-site-search-focus js-site-search-field is-clearable" name=q placeholder=Search autocomplete=off>
-<input type=hidden name=q value=site:https://ajoshi.dev/></label></form></div></div></div><div class="Header-item Header-item--full flex-justify-center d-md-none position-relative"><a class=Header-link href=https://ajoshi.dev/><img class="octicon octicon-mark-github v-align-middle" height=32 width=32 src=/images/github-mark-white.png></a></div><div class=Header-item style=margin-right:0><a href=javascript:void(0) class="Header-link no-select" onclick=switchTheme()><svg style="fill:var(--color-profile-color-modes-toggle-moon)" class="no-select" viewBox="0 0 16 16" width="16" height="16"><path fill-rule="evenodd" clip-rule="evenodd" d="M4.52208 7.71754c3.05612.0 5.53362-2.47748 5.53362-5.5336C10.0557 1.93498 10.0392 1.68986 10.0074 1.44961 9.95801 1.07727 10.3495.771159 10.6474.99992c1.4679 1.12724 2.4141 2.90007 2.4141 4.89391.0 3.40575-2.7609 6.16667-6.16665 6.16667-2.94151.0-5.40199-2.0595-6.018122-4.81523C.794841 6.87902 1.23668 6.65289 1.55321 6.85451 2.41106 7.40095 3.4296 7.71754 4.52208 7.71754z"/></svg></a></div></header></div><div id=search-result class="container-lg px-3 new-discussion-timeline" style=display:none><h1>this is user-profile</h1></div><div class=application-main><div><main><div class="gisthead pagehead bg-gray-light pb-0 pt-3 mb-4"><div class=px-0><div class="mb-3 d-flex px-3 px-md-3 px-lg-5"><div class="flex-auto min-width-0 width-fit mr-3"><div class=d-flex><div class="d-none d-md-block"><a class="avatar mr-2 flex-shrink-0" href=https://ajoshi.dev/><img class=avatar-user src=/images/thorfinn.jpeg width=32 height=32></a></div><div class="d-flex flex-column"><h1 class="break-word f3 text-normal mb-md-0 mb-1"><span class=author><a href=https://ajoshi.dev/>toothsy</a>
-</span><span class=path-divider>/</span>
-<strong class="css-truncate css-truncate-target mr-1" style=max-width:410px><a href=https://ajoshi.dev/post/golang-defer/>Golang Defer</a></strong></h1><div class="note m-0">Created <relative-time datetime="Sat, 29 Mar 2025 17:17:21 +0530" class=no-wrap>Sat, 29 Mar 2025 17:17:21 +0530</relative-time></div></div></div></div></div></div></div><div class="container-lg px-3 new-discussion-timeline"><div class="repository-content gist-content"><div><div class="js-gist-file-update-container js-task-list-container file-box"><div id=file-pytest class="file my-2"><div id=post-header class="file-header d-flex flex-md-items-center flex-items-start sticky-header" style=z-index:2><div class="file-info d-flex flex-md-items-center flex-items-start flex-order-1 flex-auto"><div class="text-mono f6 flex-auto pr-3 flex-order-2 flex-md-order-1 mt-2 mt-md-0"><summary id=toc-toggle onclick=clickToc() class="btn btn-octicon m-0 mr-2 p-2"><svg aria-hidden="true" viewBox="0 0 16 16" height="16" width="16" class="octicon octicon-list-unordered"><path fill-rule="evenodd" d="M2 4a1 1 0 100-2 1 1 0 000 2zm3.75-1.5a.75.75.0 000 1.5h8.5a.75.75.0 000-1.5h-8.5zm0 5a.75.75.0 000 1.5h8.5a.75.75.0 000-1.5h-8.5zm0 5a.75.75.0 000 1.5h8.5a.75.75.0 000-1.5h-8.5zM3 8A1 1 0 111 8a1 1 0 012 0zm-1 6a1 1 0 100-2 1 1 0 000 2z"/></svg></summary><details-menu class=SelectMenu id=toc-details style="display: none;"><div class="SelectMenu-modal rounded-3 mt-1" style=max-height:340px><div class="SelectMenu-list SelectMenu-list--borderless p-2" style=overscroll-behavior:contain id=toc-list></div></div></details-menu>760 Words</div><div class="file-actions flex-order-2 pt-0"></div></div></div><div class="Box-body px-5 pb-5" style=z-index:1><article class="markdown-body entry-content container-lg"><h1 id=defer-and-closure-in-go-lang>Defer And Closure in Go-lang</h1><p><img src=https://miro.medium.com/0*bzYROhQxguUiBqgn alt="Defer and Closure"></p><p>Hello, fellow internet user, before we begin, this article assumes you have the following pre-requisites:</p><ul><li>You know about functions in Go</li><li>Have an understanding of the local and global scope</li><li>Have your VS Code setup for Go-lang, because it&rsquo;ll be a delightful experience with autocomplete, linting, and auto-imports
-With that out of the way, onto the main issue at hand, young padawan.</li></ul><h2 id=just-what-is-defer-all-about>Just what is defer all about?</h2><p>Just so we&rsquo;re on the same page, you <strong>always</strong> use the <code>defer</code> keyword on a function call. Now, what <code>defer</code> means is that the execution of the deferred function is delayed till the end of the surrounding function.</p><p><img src=https://miro.medium.com/0*-FL_wSmKZokdvXVK alt="Defer Example"></p><ul><li>In the code above, the deferred function is <code>fmt.Println("Two")</code>, so this function will execute once the surrounding function is done executing. In our case, it was simply to print <code>fmt.Println("Three")</code>. Once that is over, the deferred function is executed.</li><li>One thing to note is that if you have multiple <code>defer</code> keywords in a single function, they will be executed in <strong>First In Last Out (FILO)</strong> order, in simple words, the reverse order in which they were deferred.</li><li>Let&rsquo;s go a little crazy for a second and add <code>defer</code> keyword to everything you see. Try predicting the output.</li></ul><p><img src=https://miro.medium.com/0*zk2MHqy6N9zf9ZvS alt="Multiple Defer Example"></p><ul><li>In the code above, since everything is deferred, nothing is executed till the control reaches line 8. As <code>fmt.Println("Four")</code> is the last function to be deferred, it is executed first. In other words, it doesn&rsquo;t make much difference if you want to defer a function just before the surrounding function ends.</li><li>Since <code>fmt.Println("One")</code> was first to be deferred, it was executed last.</li><li><strong>Things to note:</strong> The <strong>deferred function belongs to the surrounding function</strong> and <strong>not the block scope</strong>. So, if you deferred a function in an <code>if</code> block or a <code>for</code> loop, the deferred function will always execute after the surrounding function ends, not before the loop or if statement.</li></ul><h2 id=okay-but-what-if-i-wanted-to-return-something-from-a-deferred-function>Okay, but what if I wanted to return something from a deferred function?</h2><ul><li>Well, you can&rsquo;t do it. Your function needs to be the kind that returns nothing, or you can have a return and choose to defer it, but you&rsquo;ll have to ignore the return value.</li><li>However, Go has this feature called <a href=https://go.dev/tour/basics/7>named return</a>, which makes things a little interesting.</li></ul><p><img src=https://miro.medium.com/0*33WkfCzsP6fs38qK alt="Named Return Example"></p><ul><li>In the line above, when the function is created, <code>returnVal</code> is 0. We&rsquo;re deferring the anonymous function, so we jump to line 15. There, <code>returnVal</code> becomes -1. Finally, our function is fired, and we overwrite <code>returnVal</code> as 1000 and return that value.</li></ul><h2 id=okay-now-for-closures>Okay, now for closures</h2><ul><li>Closures are function values that reference variables residing outside of the function in question.</li><li>This piece of code is shamelessly stolen from the Go <a href=https://go.dev/tour/moretypes/25>docs</a> because it is actually that effective to understand.</li></ul><p><img src=https://miro.medium.com/0*cmU6WpPNwkt7jWBA alt="Closure Example"></p><ul><li><strong>Things to note:</strong> Despite having <code>sum</code> defined outside the scope of the anonymous return function, the <code>sum</code> variable is tied along with it, with a different copy every time <code>adder()</code> is called.</li><li>Here, since each instance of the anonymous function (which happens to be <code>pos(i int)</code> and <code>neg(i int)</code>) can be called with a different parameter, they both have their own <code>sum</code> variable under the hood, allowing them to have different outputs as shown.</li></ul><h2 id=lets-mix-things-up>Let&rsquo;s mix things up</h2><ul><li>It gets more interesting when you defer an anonymous function in a loop. As the function loses its meaning outside the scope of the loop, the compiler has to keep track of the deferred function calls in different ways. Have a look below.</li></ul><p><img src=https://miro.medium.com/0*sStVU_ZKRd9CYZtV alt="Defer in Loop Example"></p><ul><li>Here, VS Code shows that the <strong>variable</strong> <code>index</code> will be captured. That is to say, the address space <code>index</code> is referring to will be tied to the function. That is why in the output, we see that <code>captured index is 4</code> is printed 4 times—this is due to the closure concept.</li><li>But in the other loop (line 17), we store the <strong>value</strong> that <code>index</code> holds along with the function, as dictated by the <a href=https://go.dev/ref/spec#Defer_statements>Go Spec</a>:</li></ul><blockquote><p><em>Each time a &ldquo;defer&rdquo; statement executes, the function value and parameters to the call are evaluated as usual and saved anew, but the actual function is not invoked.</em></p></blockquote><p>Hope you learned something from this article! If there are any incorrect assumptions made on my behalf, please do tell 😊. Nothing would delight me more than dispelling my inaccurate understandings.</p><p>Meanwhile, here are some resources that helped me write this article:</p><ul><li><a href=https://blog.learngoprogramming.com/gotchas-of-defer-in-go-1-8d070894cb01>Another cool article on defer</a></li><li><a href="https://news.ycombinator.com/item?id=14668955">This Y Combinator discussion was quite insightful</a></li><li>I may or may not have taken things from this <a href=https://stackoverflow.com/questions/16010694/how-golangs-defer-capture-closures-parameter>Stack Overflow question</a></li></ul><p>Thanks for reading and hope you have a great day 😁</p></article></div></div></div></div></div></div></main></div><script type=application/javascript src=https://ajoshi.dev/js/toc.js></script><link rel=stylesheet href=https://ajoshi.dev/css/toc.css></div><div class="footer container-xl width-full p-responsive"><div class="position-relative d-flex flex-row-reverse flex-lg-row flex-wrap flex-lg-nowrap flex-justify-center flex-lg-justify-between flex-sm-items-center pt-6 pb-2 mt-6 f6 text-gray border-top border-gray-light"><a aria-label=Homepage title=GitHub class="footer-octicon d-none d-lg-block mr-lg-4" href=https://ajoshi.dev/><svg height="24" class="octicon octicon-mark-github" viewBox="0 0 16 16" width="24"><path fill-rule="evenodd" d="M8 0C3.58.0.0 3.58.0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38.0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95.0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12.0.0.67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15.0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48.0 1.07-.01 1.93-.01 2.2.0.21.15.46.55.38A8.013 8.013.0 0016 8c0-4.42-3.58-8-8-8z"/></svg></a><ul class="list-style-none d-flex flex-wrap col-12 flex-justify-center flex-lg-justify-between mb-2 mb-lg-0"><li class="mr-3 mr-lg-0">Theme by <a href=https://github.com/MeiK2333/github-style>github-style</a></li><li class="mr-3 mr-lg-0">GitHub and the Invertocat logo are trademarks of <a href=https://github.com/>GitHub, Inc.</a></li></ul></div><div class="d-flex flex-justify-center pb-6"><span class="f6 text-gray-light"></span></div></div></body><script type=application/javascript src=https://ajoshi.dev/js/github-style.js></script></html>
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <script type="application/javascript" src='https://ajoshi.dev/js/theme-mode.js'></script>
+    <link rel="stylesheet" href='https://ajoshi.dev/css/frameworks.min.css' />
+    <link rel="stylesheet" href='https://ajoshi.dev/css/github.min.css' />
+    <link rel="stylesheet" href='https://ajoshi.dev/css/github-style.css' />
+    <link rel="stylesheet" href='https://ajoshi.dev/css/light.css' />
+    <link rel="stylesheet" href='https://ajoshi.dev/css/dark.css' />
+    <link rel="stylesheet" href='https://ajoshi.dev/css/syntax.css' />
+    <title>Golang Defer - Atharva CJ&#39;s place</title>
+    
+    <link rel="icon" type="image/x-icon" href='/images/github-mark.png'>
+    
+    <meta name="theme-color" content="#1e2327">
+
+    
+    
+
+    
+    <meta name="description"
+  content="Defer And Closure in Go-lang Hello, fellow internet user, before we begin, this article assumes you have the following pre-requisites:
+You know about functions in Go Have an understanding of the local and global scope Have your VS Code setup for Go-lang, because it&rsquo;ll be a delightful experience with autocomplete, linting, and auto-imports With that out of the way, onto the main issue at hand, young padawan. " />
+<meta name="keywords"
+  content='blog, google analytics' />
+<meta name="robots" content="noodp" />
+<link rel="canonical" href="https://ajoshi.dev/post/golang-defer/" />
+
+
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="Golang Defer - Atharva CJ&#39;s place" />
+<meta name="twitter:description"
+  content="Defer And Closure in Go-lang Hello, fellow internet user, before we begin, this article assumes you have the following pre-requisites:
+You know about functions in Go Have an understanding of the local and global scope Have your VS Code setup for Go-lang, because it&rsquo;ll be a delightful experience with autocomplete, linting, and auto-imports With that out of the way, onto the main issue at hand, young padawan. " />
+<meta name="twitter:site" content="https://ajoshi.dev/" />
+<meta name="twitter:creator" content="" />
+<meta name="twitter:image"
+  content="https://ajoshi.dev/">
+
+
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Golang Defer - Atharva CJ&#39;s place">
+<meta property="og:description"
+  content="Defer And Closure in Go-lang Hello, fellow internet user, before we begin, this article assumes you have the following pre-requisites:
+You know about functions in Go Have an understanding of the local and global scope Have your VS Code setup for Go-lang, because it&rsquo;ll be a delightful experience with autocomplete, linting, and auto-imports With that out of the way, onto the main issue at hand, young padawan. " />
+<meta property="og:url" content="https://ajoshi.dev/post/golang-defer/" />
+<meta property="og:site_name" content="Golang Defer" />
+<meta property="og:image"
+  content="https://ajoshi.dev/">
+<meta property="og:image:width" content="2048">
+<meta property="og:image:height" content="1024">
+
+<meta property="article:published_time" content="2025-03-29 17:17:21 &#43;0530 &#43;0530" />
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+
+<body>
+  <div style="position: relative">
+  <header class="Header js-details-container Details px-3 px-md-4 px-lg-5 flex-wrap flex-md-nowrap open Details--on">
+    <div class="Header-item mobile-none" style="margin-top: -4px; margin-bottom: -4px;">
+      <a class="Header-link" href="https://ajoshi.dev/">
+        <img class="octicon" height="32" width="32" src="/images/github-mark-white.png">
+      </a>
+    </div>
+    <div class="Header-item d-md-none">
+      <button class="Header-link btn-link js-details-target" type="button"
+        onclick="document.querySelector('#header-search').style.display = document.querySelector('#header-search').style.display == 'none'? 'block': 'none'">
+        <svg height="24" class="octicon octicon-three-bars" viewBox="0 0 16 16" version="1.1" width="24">
+          <path fill-rule="evenodd"
+            d="M1 2.75A.75.75 0 011.75 2h12.5a.75.75 0 110 1.5H1.75A.75.75 0 011 2.75zm0 5A.75.75 0 011.75 7h12.5a.75.75 0 110 1.5H1.75A.75.75 0 011 7.75zM1.75 12a.75.75 0 100 1.5h12.5a.75.75 0 100-1.5H1.75z">
+          </path>
+        </svg>
+      </button>
+    </div>
+    <div style="display: none;" id="header-search"
+      class="Header-item Header-item--full flex-column flex-md-row width-full flex-order-2 flex-md-order-none mr-0 mr-md-3 mt-3 mt-md-0 Details-content--hidden-not-important d-md-flex">
+      <div
+        class="Header-search header-search flex-auto js-site-search position-relative flex-self-stretch flex-md-self-auto mb-3 mb-md-0 mr-0 mr-md-3 scoped-search site-scoped-search js-jump-to">
+        <div class="position-relative">
+          
+          <form target="_blank" action="https://www.google.com/search" accept-charset="UTF-8" method="get"
+            autocomplete="off">
+            <label
+              class="Header-search-label form-control input-sm header-search-wrapper p-0 js-chromeless-input-container header-search-wrapper-jump-to position-relative d-flex flex-justify-between flex-items-center">
+              <input type="text"
+                class="Header-search-input form-control input-sm header-search-input jump-to-field js-jump-to-field js-site-search-focus js-site-search-field is-clearable"
+                name="q" value="" placeholder="Search" autocomplete="off">
+              <input type="hidden" name="q" value="site:https://ajoshi.dev/">
+            </label>
+          </form>
+          
+        </div>
+      </div>
+    </div>
+
+    <div class="Header-item Header-item--full flex-justify-center d-md-none position-relative">
+      <a class="Header-link " href="https://ajoshi.dev/">
+        <img class="octicon octicon-mark-github v-align-middle" height="32" width="32"
+          src="/images/github-mark-white.png">
+      </a>
+    </div>
+    <div class="Header-item" style="margin-right: 0;">
+      <a href="javascript:void(0)" class="Header-link no-select" onclick="switchTheme()">
+        <svg style="fill: var(--color-profile-color-modes-toggle-moon);" class="no-select" viewBox="0 0 16 16"
+          version="1.1" width="16" height="16">
+          <path fill-rule="evenodd" clip-rule="evenodd"
+            d="M4.52208 7.71754C7.5782 7.71754 10.0557 5.24006 10.0557 2.18394C10.0557 1.93498 10.0392 1.68986 10.0074 1.44961C9.95801 1.07727 10.3495 0.771159 10.6474 0.99992C12.1153 2.12716 13.0615 3.89999 13.0615 5.89383C13.0615 9.29958 10.3006 12.0605 6.89485 12.0605C3.95334 12.0605 1.49286 10.001 0.876728 7.24527C0.794841 6.87902 1.23668 6.65289 1.55321 6.85451C2.41106 7.40095 3.4296 7.71754 4.52208 7.71754Z">
+          </path>
+        </svg>
+      </a>
+    </div>
+  </header>
+</div>
+  <div id="search-result" class="container-lg px-3 new-discussion-timeline" style="display: none;">
+    <h1>this is user-profile</h1>
+</div>
+  
+<div class="application-main">
+  <div>
+  <main>
+    <div class="gisthead pagehead bg-gray-light pb-0 pt-3 mb-4">
+      <div class="px-0">
+        <div class="mb-3 d-flex px-3 px-md-3 px-lg-5">
+          <div class="flex-auto min-width-0 width-fit mr-3">
+            <div class="d-flex">
+              <div class="d-none d-md-block">
+                <a class="avatar mr-2 flex-shrink-0" href="https://ajoshi.dev/">
+                  <img class=" avatar-user"
+                    src="/images/thorfinn.jpeg"
+                    width="32" height="32"></a>
+              </div>
+              <div class="d-flex flex-column">
+                <h1 class="break-word f3 text-normal mb-md-0 mb-1">
+                  <span class="author">
+                    <a href="https://ajoshi.dev/">toothsy</a>
+                  </span>
+                  <span class="path-divider">/</span>
+                  <strong class="css-truncate css-truncate-target mr-1" style="max-width: 410px">
+                    <a href="https://ajoshi.dev/post/golang-defer/">Golang Defer</a>
+                  </strong>
+                </h1>
+                <div class="note m-0">
+                  Created <relative-time datetime="Sat, 29 Mar 2025 17:17:21 &#43;0530"
+                    class="no-wrap">
+                    Sat, 29 Mar 2025 17:17:21 &#43;0530</relative-time>
+
+                  
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-lg px-3 new-discussion-timeline">
+      <div class="repository-content gist-content">
+        <div>
+          <div class="js-gist-file-update-container js-task-list-container file-box">
+            <div id="file-pytest" class="file my-2">
+              <div id="post-header" class="file-header d-flex flex-md-items-center flex-items-start sticky-header" style="z-index: 2">
+                <div class="file-info d-flex flex-md-items-center flex-items-start flex-order-1 flex-auto">
+                  <div class="text-mono f6 flex-auto pr-3 flex-order-2 flex-md-order-1 mt-2 mt-md-0">
+                    
+                    <summary id="toc-toggle" onclick="clickToc()" class="btn btn-octicon m-0 mr-2 p-2">
+                      <svg aria-hidden="true" viewBox="0 0 16 16" height="16" width="16" class="octicon octicon-list-unordered">
+                        <path fill-rule="evenodd" d="M2 4a1 1 0 100-2 1 1 0 000 2zm3.75-1.5a.75.75 0 000 1.5h8.5a.75.75 0 000-1.5h-8.5zm0 5a.75.75 0 000 1.5h8.5a.75.75 0 000-1.5h-8.5zm0 5a.75.75 0 000 1.5h8.5a.75.75 0 000-1.5h-8.5zM3 8a1 1 0 11-2 0 1 1 0 012 0zm-1 6a1 1 0 100-2 1 1 0 000 2z"></path>
+                      </svg>
+                    </summary>
+                    <details-menu class="SelectMenu" id="toc-details" style="display: none;">
+                      <div class="SelectMenu-modal rounded-3 mt-1" style="max-height: 340px;">
+                        <div class="SelectMenu-list SelectMenu-list--borderless p-2" style="overscroll-behavior: contain;" id="toc-list">
+                        </div>
+                      </div>
+                    </details-menu>
+                      760 Words
+                    
+
+                  </div>
+                  <div class="file-actions flex-order-2 pt-0">
+                    
+                  </div>
+                </div>
+              </div>
+
+
+              <div class="Box-body px-5 pb-5" style="z-index: 1">
+                <article class="markdown-body entry-content container-lg"><h1 id="defer-and-closure-in-go-lang">Defer And Closure in Go-lang</h1>
+<p><img src="https://miro.medium.com/0*bzYROhQxguUiBqgn" alt="Defer and Closure"></p>
+<p>Hello, fellow internet user, before we begin, this article assumes you have the following pre-requisites:</p>
+<ul>
+<li>You know about functions in Go</li>
+<li>Have an understanding of the local and global scope</li>
+<li>Have your VS Code setup for Go-lang, because it&rsquo;ll be a delightful experience with autocomplete, linting, and auto-imports
+With that out of the way, onto the main issue at hand, young padawan.</li>
+</ul>
+<h2 id="just-what-is-defer-all-about">Just what is defer all about?</h2>
+<p>Just so we&rsquo;re on the same page, you <strong>always</strong> use the <code>defer</code> keyword on a function call. Now, what <code>defer</code> means is that the execution of the deferred function is delayed till the end of the surrounding function.</p>
+<p><img src="https://miro.medium.com/0*-FL_wSmKZokdvXVK" alt="Defer Example"></p>
+<ul>
+<li>In the code above, the deferred function is <code>fmt.Println(&quot;Two&quot;)</code>, so this function will execute once the surrounding function is done executing. In our case, it was simply to print <code>fmt.Println(&quot;Three&quot;)</code>. Once that is over, the deferred function is executed.</li>
+<li>One thing to note is that if you have multiple <code>defer</code> keywords in a single function, they will be executed in <strong>First In Last Out (FILO)</strong> order, in simple words, the reverse order in which they were deferred.</li>
+<li>Let&rsquo;s go a little crazy for a second and add <code>defer</code> keyword to everything you see. Try predicting the output.</li>
+</ul>
+<p><img src="https://miro.medium.com/0*zk2MHqy6N9zf9ZvS" alt="Multiple Defer Example"></p>
+<ul>
+<li>In the code above, since everything is deferred, nothing is executed till the control reaches line 8. As <code>fmt.Println(&quot;Four&quot;)</code> is the last function to be deferred, it is executed first. In other words, it doesn&rsquo;t make much difference if you want to defer a function just before the surrounding function ends.</li>
+<li>Since <code>fmt.Println(&quot;One&quot;)</code> was first to be deferred, it was executed last.</li>
+<li><strong>Things to note:</strong> The <strong>deferred function belongs to the surrounding function</strong> and <strong>not the block scope</strong>. So, if you deferred a function in an <code>if</code> block or a <code>for</code> loop, the deferred function will always execute after the surrounding function ends, not before the loop or if statement.</li>
+</ul>
+<h2 id="okay-but-what-if-i-wanted-to-return-something-from-a-deferred-function">Okay, but what if I wanted to return something from a deferred function?</h2>
+<ul>
+<li>Well, you can&rsquo;t do it. Your function needs to be the kind that returns nothing, or you can have a return and choose to defer it, but you&rsquo;ll have to ignore the return value.</li>
+<li>However, Go has this feature called <a href="https://go.dev/tour/basics/7">named return</a>, which makes things a little interesting.</li>
+</ul>
+<p><img src="https://miro.medium.com/0*33WkfCzsP6fs38qK" alt="Named Return Example"></p>
+<ul>
+<li>In the line above, when the function is created, <code>returnVal</code> is 0. We&rsquo;re deferring the anonymous function, so we jump to line 15. There, <code>returnVal</code> becomes -1. Finally, our function is fired, and we overwrite <code>returnVal</code> as 1000 and return that value.</li>
+</ul>
+<h2 id="okay-now-for-closures">Okay, now for closures</h2>
+<ul>
+<li>Closures are function values that reference variables residing outside of the function in question.</li>
+<li>This piece of code is shamelessly stolen from the Go <a href="https://go.dev/tour/moretypes/25">docs</a> because it is actually that effective to understand.</li>
+</ul>
+<p><img src="https://miro.medium.com/0*cmU6WpPNwkt7jWBA" alt="Closure Example"></p>
+<ul>
+<li><strong>Things to note:</strong> Despite having <code>sum</code> defined outside the scope of the anonymous return function, the <code>sum</code> variable is tied along with it, with a different copy every time <code>adder()</code> is called.</li>
+<li>Here, since each instance of the anonymous function (which happens to be <code>pos(i int)</code> and <code>neg(i int)</code>) can be called with a different parameter, they both have their own <code>sum</code> variable under the hood, allowing them to have different outputs as shown.</li>
+</ul>
+<h2 id="lets-mix-things-up">Let&rsquo;s mix things up</h2>
+<ul>
+<li>It gets more interesting when you defer an anonymous function in a loop. As the function loses its meaning outside the scope of the loop, the compiler has to keep track of the deferred function calls in different ways. Have a look below.</li>
+</ul>
+<p><img src="https://miro.medium.com/0*sStVU_ZKRd9CYZtV" alt="Defer in Loop Example"></p>
+<ul>
+<li>Here, VS Code shows that the <strong>variable</strong> <code>index</code> will be captured. That is to say, the address space <code>index</code> is referring to will be tied to the function. That is why in the output, we see that <code>captured index is 4</code> is printed 4 times—this is due to the closure concept.</li>
+<li>But in the other loop (line 17), we store the <strong>value</strong> that <code>index</code> holds along with the function, as dictated by the <a href="https://go.dev/ref/spec#Defer_statements">Go Spec</a>:</li>
+</ul>
+<blockquote>
+<p><em>Each time a &ldquo;defer&rdquo; statement executes, the function value and parameters to the call are evaluated as usual and saved anew, but the actual function is not invoked.</em></p></blockquote>
+<p>Hope you learned something from this article! If there are any incorrect assumptions made on my behalf, please do tell 😊. Nothing would delight me more than dispelling my inaccurate understandings.</p>
+<p>Meanwhile, here are some resources that helped me write this article:</p>
+<ul>
+<li><a href="https://blog.learngoprogramming.com/gotchas-of-defer-in-go-1-8d070894cb01">Another cool article on defer</a></li>
+<li><a href="https://news.ycombinator.com/item?id=14668955">This Y Combinator discussion was quite insightful</a></li>
+<li>I may or may not have taken things from this <a href="https://stackoverflow.com/questions/16010694/how-golangs-defer-capture-closures-parameter">Stack Overflow question</a></li>
+</ul>
+<p>Thanks for reading and hope you have a great day 😁</p></article>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+<script type="application/javascript" src='https://ajoshi.dev/js/toc.js'></script>
+<link rel="stylesheet" href='https://ajoshi.dev/css/toc.css' />
+
+  
+</div>
+
+  <div class="footer container-xl width-full p-responsive">
+  <div
+    class="position-relative d-flex flex-row-reverse flex-lg-row flex-wrap flex-lg-nowrap flex-justify-center flex-lg-justify-between flex-sm-items-center pt-6 pb-2 mt-6 f6 text-gray border-top border-gray-light ">
+    <a aria-label="Homepage" title="GitHub" class="footer-octicon d-none d-lg-block mr-lg-4" href="https://ajoshi.dev/">
+      <svg height="24" class="octicon octicon-mark-github" viewBox="0 0 16 16" version="1.1" width="24">
+        <path fill-rule="evenodd"
+          d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z">
+        </path>
+      </svg>
+    </a>
+    <ul class="list-style-none d-flex flex-wrap col-12 flex-justify-center flex-lg-justify-between mb-2 mb-lg-0">
+      
+      <li class="mr-3 mr-lg-0">Theme by <a href='https://github.com/MeiK2333/github-style'>github-style</a></li>
+      
+      <li class="mr-3 mr-lg-0">GitHub and the Invertocat logo are trademarks of <a href="https://github.com/">GitHub, Inc.</a></li>
+    </ul>
+  </div>
+  <div class="d-flex flex-justify-center pb-6">
+    <span class="f6 text-gray-light"></span>
+  </div>
+
+
+</div>
+
+</body>
+
+<script type="application/javascript" src="https://ajoshi.dev/js/github-style.js"></script>
+
+
+
+
+
+
+
+</html>
