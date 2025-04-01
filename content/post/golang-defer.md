@@ -3,6 +3,7 @@ date = '2025-03-29T17:17:21+05:30'
 draft = false
 title = 'Golang Defer'
 pin = true
+tags = ["golang","closure","defer"]
 +++
 
 # Defer And Closure in Go-lang

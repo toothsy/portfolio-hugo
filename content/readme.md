@@ -1,16 +1,16 @@
 # About Me ✨
 
-A backend-heavy full-stack developer who enjoys working on cloud applications and infrastructure. Proficient in **performance optimization, security vigilance, and automation**. Currently diving deeper into **self-hosted solutions** and **cloud engineering** to stay ahead in the ever-evolving tech space. Always ready for a new challenge and excited to innovate! 🤩🔥
+A backend-heavy full-stack developer who enjoys working on cloud applications and infrastructure. Proficient in **performance optimization, security vigilance, and automation**. Currently diving deeper into **MCP** for **AI** to stay ahead in the ever-evolving tech space. Always ready for a new challenge and excited to innovate! 🤩🔥
 
 ## 🛠️ Technical Skills
 
+- **AI:** MCP👀,Deepseek-r1🌊, ollama🦙
 - **Languages:** Go (Golang) 🐹, JavaScript 🛠️, C# 🔷, Java ☕
-- **Frontend:** React ⚛️, HTML & CSS 🎨, Flutter 📱
+- **Frontend:** React ⚛️, HTML & CSS 🎨, Flutter 📱,Hugo 🚀
 - **Backend:** Golang, C# APIs 🔌, REST API 🌍
-- **Cloud & Infrastructure:** Kubernetes ☁️, Linode 🌐, Docker 🐳, Hugo 🚀
+- **Cloud & Infrastructure:** Kubernetes ☁️, Docker 🐳
 - **Automation & CI/CD:** GitHub Pipelines 🔄, GitHub REST API 📡, Bash & Linux Scripting 🖥️
 - **Security & Code Quality:** Sonar 🔍, Security Monitoring 🛡️
-- **Concurrency & Performance:** High-performance Golang 🚀
 - **Databases:** MySQL 🗄️, MSSQL 🏢
 - **Version Control:** Git 🔧, TFVC 📂
 

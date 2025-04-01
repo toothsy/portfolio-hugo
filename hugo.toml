@@ -6,7 +6,7 @@ pygmentsCodeFences = true
 pygmentsUseClasses = true
 
 [params]
-  author = "toothsy"
+  author = "Atharva CJ"
   description = "If that is our will, who dares to stop us?"
   github = "toothsy"
   tumblr = "dootdootdootdootdootdootdoot"
@@ -19,8 +19,8 @@ pygmentsUseClasses = true
   headerIcon = "/images/github-mark-white.png"
   location = "India"
   userStatusEmoji = "😁"
-  enableGitalk = false
-  enableSearch = false
+  enableGitalk = true
+  enableSearch = true
   bluesky = "cjatharva.bsky.social"
 
   [params.gitalk]
