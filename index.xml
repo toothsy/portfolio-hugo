@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Atharva CJ's place</title><link>https://acjoshi.dev/</link><description>Recent content on Atharva CJ's place</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Tue, 01 Apr 2025 05:01:39 +0000</lastBuildDate><atom:link href="https://acjoshi.dev/index.xml" rel="self" type="application/rss+xml"/><item><title>Golang Defer</title><link>https://acjoshi.dev/post/golang-defer/</link><pubDate>Sat, 29 Mar 2025 17:17:21 +0530</pubDate><guid>https://acjoshi.dev/post/golang-defer/</guid><description>&lt;h1 id="defer-and-closure-in-go-lang">Defer And Closure in Go-lang&lt;/h1>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Atharva CJ's place</title><link>https://acjoshi.dev/</link><description>Recent content on Atharva CJ's place</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Tue, 01 Apr 2025 05:49:39 +0000</lastBuildDate><atom:link href="https://acjoshi.dev/index.xml" rel="self" type="application/rss+xml"/><item><title>Golang Defer</title><link>https://acjoshi.dev/post/golang-defer/</link><pubDate>Sat, 29 Mar 2025 17:17:21 +0530</pubDate><guid>https://acjoshi.dev/post/golang-defer/</guid><description>&lt;h1 id="defer-and-closure-in-go-lang">Defer And Closure in Go-lang&lt;/h1>
 &lt;p>&lt;img src="https://miro.medium.com/0*bzYROhQxguUiBqgn" alt="Defer and Closure">&lt;/p>
 &lt;p>Hello, fellow internet user, before we begin, this article assumes you have the following pre-requisites:&lt;/p>
 &lt;ul>
@@ -7,16 +7,16 @@
 &lt;li>Have your VS Code setup for Go-lang, because it&amp;rsquo;ll be a delightful experience with autocomplete, linting, and auto-imports
 With that out of the way, onto the main issue at hand, young padawan.&lt;/li>
 &lt;/ul></description></item><item><title/><link>https://acjoshi.dev/readme/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://acjoshi.dev/readme/</guid><description>&lt;h1 id="about-me-">About Me ✨&lt;/h1>
-&lt;p>A backend-heavy full-stack developer who enjoys working on cloud applications and infrastructure. Proficient in &lt;strong>performance optimization, security vigilance, and automation&lt;/strong>. Currently diving deeper into &lt;strong>self-hosted solutions&lt;/strong> and &lt;strong>cloud engineering&lt;/strong> to stay ahead in the ever-evolving tech space. Always ready for a new challenge and excited to innovate! 🤩🔥&lt;/p>
+&lt;p>A backend-heavy full-stack developer who enjoys working on cloud applications and infrastructure. Proficient in &lt;strong>performance optimization, security vigilance, and automation&lt;/strong>. Currently diving deeper into &lt;strong>MCP&lt;/strong> for &lt;strong>AI&lt;/strong> to stay ahead in the ever-evolving tech space. Always ready for a new challenge and excited to innovate! 🤩🔥&lt;/p>
 &lt;h2 id="-technical-skills">🛠️ Technical Skills&lt;/h2>
 &lt;ul>
+&lt;li>&lt;strong>AI:&lt;/strong> MCP👀,Deepseek-r1🌊, ollama🦙&lt;/li>
 &lt;li>&lt;strong>Languages:&lt;/strong> Go (Golang) 🐹, JavaScript 🛠️, C# 🔷, Java ☕&lt;/li>
-&lt;li>&lt;strong>Frontend:&lt;/strong> React ⚛️, HTML &amp;amp; CSS 🎨, Flutter 📱&lt;/li>
+&lt;li>&lt;strong>Frontend:&lt;/strong> React ⚛️, HTML &amp;amp; CSS 🎨, Flutter 📱,Hugo 🚀&lt;/li>
 &lt;li>&lt;strong>Backend:&lt;/strong> Golang, C# APIs 🔌, REST API 🌍&lt;/li>
-&lt;li>&lt;strong>Cloud &amp;amp; Infrastructure:&lt;/strong> Kubernetes ☁️, Linode 🌐, Docker 🐳, Hugo 🚀&lt;/li>
+&lt;li>&lt;strong>Cloud &amp;amp; Infrastructure:&lt;/strong> Kubernetes ☁️, Docker 🐳&lt;/li>
 &lt;li>&lt;strong>Automation &amp;amp; CI/CD:&lt;/strong> GitHub Pipelines 🔄, GitHub REST API 📡, Bash &amp;amp; Linux Scripting 🖥️&lt;/li>
 &lt;li>&lt;strong>Security &amp;amp; Code Quality:&lt;/strong> Sonar 🔍, Security Monitoring 🛡️&lt;/li>
-&lt;li>&lt;strong>Concurrency &amp;amp; Performance:&lt;/strong> High-performance Golang 🚀&lt;/li>
 &lt;li>&lt;strong>Databases:&lt;/strong> MySQL 🗄️, MSSQL 🏢&lt;/li>
 &lt;li>&lt;strong>Version Control:&lt;/strong> Git 🔧, TFVC 📂&lt;/li>
 &lt;/ul>
