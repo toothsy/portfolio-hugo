@@ -19,9 +19,10 @@ pygmentsUseClasses = true
   headerIcon = "/images/github-mark-white.png"
   location = "India"
   userStatusEmoji = "😁"
-  enableGitalk = true
+  enableGitalk = false
   enableSearch = true
   bluesky = "cjatharva.bsky.social"
+  linkedin = "c-j-atharva"
 
   [params.gitalk]
     clientID = "Your client ID" # Your client ID
@@ -40,5 +41,28 @@ pygmentsUseClasses = true
 
 [frontmatter]
   lastmod = ["lastmod", ":fileModTime", ":default"]
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
+
+[[menu.main]]
+  identifier = "home"
+  name = "Overview"
+  url = "/"
+  weight = 1
+
+[[menu.main]]
+  identifier = "about"
+  name = "About"
+  url = "/about/"
+  weight = 2
+
+[[menu.main]]
+  identifier = "posts"
+  name = "Posts"
+  url = "/post/"
+  weight = 3
 
 

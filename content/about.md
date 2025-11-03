@@ -1,3 +1,9 @@
+---
+title: "About"
+date: 2025-01-01
+draft: false
+---
+
 # About Me ✨
 
 A backend-heavy full-stack developer who enjoys working on cloud applications and infrastructure. Proficient in **performance optimization, security vigilance, and automation**. Currently diving deeper into **MCP** for **AI** to stay ahead in the ever-evolving tech space. Always ready for a new challenge and excited to innovate! 🤩🔥

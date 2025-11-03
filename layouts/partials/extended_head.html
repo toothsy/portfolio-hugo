@@ -44,3 +44,6 @@
 {{ if eq (getenv "HUGO_ENV") "production"}}
 {{ template "_internal/google_analytics.html" . }}
 {{ end }}
+
+<!-- Custom Timeline CSS -->
+<link rel="stylesheet" href="{{ "css/timeline.css" | absURL }}" />
