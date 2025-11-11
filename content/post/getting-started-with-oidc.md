@@ -3,7 +3,7 @@ date = '2025-11-08T18:00:00+05:30'
 draft = true
 title = 'Getting started with OIDC and dex with kind'
 pin = true
-tags = ["dex","oidc","OAuth2", kong", "postgres", "k8s", "kubernetes", "docker", "helm", "helmfile", "kind"]
+tags = ["dex","oidc","OAuth2", "kong", "postgres", "k8s", "kubernetes", "docker", "helm", "helmfile", "kind"]
 +++
 
 - this article covers how you can setup a local cluster in with kind (not rudely), the next one would cover GitHub Oauth process.

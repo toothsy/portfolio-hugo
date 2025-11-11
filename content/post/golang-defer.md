@@ -2,7 +2,7 @@
 date = '2025-03-29T17:17:21+05:30'
 draft = false
 title = 'Golang Defer'
-pin = true
+pin = false
 tags = ["golang","closure","defer"]
 +++
 
