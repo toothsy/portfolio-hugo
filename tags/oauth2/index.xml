@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on Atharva CJ's place</title><link>https://acjoshi.dev/post/</link><description>Recent content in Posts on Atharva CJ's place</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Mon, 01 Dec 2025 03:09:43 +0000</lastBuildDate><atom:link href="https://acjoshi.dev/post/index.xml" rel="self" type="application/rss+xml"/><item><title>Getting started with OIDC and Dex with kind</title><link>https://acjoshi.dev/post/getting-started-with-oidc/</link><pubDate>Sat, 08 Nov 2025 18:00:00 +0530</pubDate><guid>https://acjoshi.dev/post/getting-started-with-oidc/</guid><description>&lt;ul>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>OAuth2 on Atharva CJ's place</title><link>https://acjoshi.dev/tags/oauth2/</link><description>Recent content in OAuth2 on Atharva CJ's place</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Mon, 01 Dec 2025 03:09:43 +0000</lastBuildDate><atom:link href="https://acjoshi.dev/tags/oauth2/index.xml" rel="self" type="application/rss+xml"/><item><title>Getting started with OIDC and Dex with kind</title><link>https://acjoshi.dev/post/getting-started-with-oidc/</link><pubDate>Sat, 08 Nov 2025 18:00:00 +0530</pubDate><guid>https://acjoshi.dev/post/getting-started-with-oidc/</guid><description>&lt;ul>
 &lt;li>this article covers how you can setup a local cluster in with kind (not rudely), the next one would cover GitHub Oauth process.&lt;/li>
 &lt;/ul>
 &lt;h2 id="oidcintro">OIDC?(Intro)&lt;/h2>
@@ -28,12 +28,4 @@ So your app only has to implement OIDC process for Dex, Dex will take care of th
 &lt;h2 id="but-what-is-oidc-technically">But what is OIDC, technically?&lt;/h2>
 &lt;ul>
 &lt;li>
-&lt;p>before i summarise briefly how an OIDC flow looks like, lets get on the same page about terminology for clarity.&lt;/p></description></item><item><title>Golang Defer</title><link>https://acjoshi.dev/post/golang-defer/</link><pubDate>Sat, 29 Mar 2025 17:17:21 +0530</pubDate><guid>https://acjoshi.dev/post/golang-defer/</guid><description>&lt;h1 id="defer-and-closure-in-go-lang">Defer And Closure in Go-lang&lt;/h1>
-&lt;p>&lt;img src="https://miro.medium.com/0*bzYROhQxguUiBqgn" alt="Defer and Closure">&lt;/p>
-&lt;p>Hello, fellow internet user, before we begin, this article assumes you have the following pre-requisites:&lt;/p>
-&lt;ul>
-&lt;li>You know about functions in Go&lt;/li>
-&lt;li>Have an understanding of the local and global scope&lt;/li>
-&lt;li>Have your VS Code setup for Go-lang, because it&amp;rsquo;ll be a delightful experience with autocomplete, linting, and auto-imports
-With that out of the way, onto the main issue at hand, young padawan.&lt;/li>
-&lt;/ul></description></item></channel></rss>
+&lt;p>before i summarise briefly how an OIDC flow looks like, lets get on the same page about terminology for clarity.&lt;/p></description></item></channel></rss>
