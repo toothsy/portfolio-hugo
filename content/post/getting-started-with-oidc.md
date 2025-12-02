@@ -65,6 +65,8 @@ So your app only has to implement OIDC process for Dex, Dex will take care of th
   - [helmfile(to handle different environments)](https://github.com/helmfile/helmfile?tab=readme-ov-file#installation)
   - [helm-diff(for helmfile to know what changed)](https://github.com/databus23/helm-diff?tab=readme-ov-file#install)
   
+- You can find the code for all of this [here](https://github.com/toothsy/dex-oidc-demo)  
+
 ### Architecture
 
 - We will deploy our Dex instance behind a Kong gateway in a kind cluster, reason being that Dex is built for production, so you'd follow similar patterns when you use it in your actual project.
@@ -140,6 +142,15 @@ releases:
     values:
       - dex-values.yaml
 
+  - name: backend
+    namespace: auth
+    createNamespace: false
+    chart: ./charts/backend
+    values:
+      - backend-values.yaml
+    needs:
+      - auth/dex
+
   - name: frontend
     namespace: frontend
     createNamespace: true
@@ -147,6 +158,15 @@ releases:
     values:
       - frontend-values.yaml
   ```
+
+##### charts?
+
+- for any application to be deployed in your cluster, you need charts, charts are yaml files of deployment, service, ingress at its minimum.
+- deployment is a yaml file that describes how much resources your application wants, resources could be pods, cpu
+- service is an abstraction for the application that will run in a production.
+- ingress is the biggest culprit before when your pod is running but still your requests wont be processed, its because none of your request are actually going to the pod.
+- in k8s everything is default deny so you request never reached the pod as ingress rules were not setup
+- here we're telling `helmfile` that hey, please install dex, kong, frontend app.
 
 #### dex config
 
@@ -250,6 +270,6 @@ dex:
           key: password
 ```
 
-![dex-local-login](/dexLogin.gif)
+## DEMO
 
-### explanation
+![dex-local-login-demo](/images/dexLogin.gif)
