@@ -250,6 +250,6 @@ dex:
           key: password
 ```
 
-![dex-local-login](../../assets/dexLogin.gif)
+![dex-local-login](/dexLogin.gif)
 
 ### explanation
