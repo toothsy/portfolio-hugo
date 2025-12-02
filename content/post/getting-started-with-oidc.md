@@ -6,12 +6,12 @@ pin = true
 tags = ["dex","oidc","OAuth2", "kong", "postgres", "k8s", "kubernetes", "docker", "helm", "helmfile", "kind"]
 +++
 
-- this article covers how you can setup a local cluster in with kind (not rudely), the next one would cover GitHub Oauth process.
+- this article covers how you can setup a local cluster in with kind (not rudely), the next one would cover Microsoft Oauth process.
 
-## OIDC?(Intro)
+## OIDC?
 
-- Open IDentity Connect is a AUTHENTICATION protocol that is built on top of Oauth2.
 - Oauth2 is primarily a AUTHORIZATION protocol.(The capitalization is more a reminder to myself than the reader)
+- OpenID Connect is a AUTHENTICATION protocol that is built on top of Oauth2, effectively making it handle both.
 - OIDC is the reason why you get that shiny "Sign in with Google" or Microsoft, or Facebook button in different applications you see.
 
 ## Why do I need dex?
@@ -28,7 +28,7 @@ tags = ["dex","oidc","OAuth2", "kong", "postgres", "k8s", "kubernetes", "docker"
 - Dex would talk to other OIDC providers and your application remains agnostic about the different providers, your application only knows about Dex and the tokens Dex gives.
 - Dex comes with a local installation too, which means that the source of truth for authentication is its own database, you can interact with this service via grpc calls.
 - You can configure the storage options as described [here](https://dexidp.io/docs/configuration/storage/)
-- Oauth2 is the only protocol your application needs to support, the upstream connector can be anything, LDAP,SAML,OAUTH,here's the exhaustive [list](https://dexidp.io/docs/connectors/).
+- Dex's OIDC is the only protocol your application needs to support, the upstream connector can be anything, LDAP,SAML,OAUTH,here's the exhaustive [list](https://dexidp.io/docs/connectors/).
 Connector is basically the place where Dex will go to for getting the user credentials verified.
 So your app only has to implement OIDC process for Dex, Dex will take care of the rest.
 
@@ -38,7 +38,7 @@ So your app only has to implement OIDC process for Dex, Dex will take care of th
   - your app will be called relying party, think of it like you are relying on GitHub.
   - GitHub will be called Identity provider.
   - your users would be called plain old users.
-  - token here refers to a JSON Web Token or JWT token.(think of it like a immutable source of truth that gets passed around)
+  - token here refers to a JSON Web Token. (they are signed tokens that gets passed around)
   - client-id and client-secret are things you would get from the identity provider you have registered against.
   - redirect_url, this is the place identity provider will tell the user to go after they have successfully logged in with their creds.
   - consent screen, this refers to the time when users login for the first time and identity provider wants to let the user know what the relying party wants to access.
@@ -46,13 +46,18 @@ So your app only has to implement OIDC process for Dex, Dex will take care of th
 - Alright then lets get on already:
 
   1. user clicks on "Sign in with GitHub", this triggers a call to GitHub with your client-id, redirect_url, scope.
-  2. If the redirect_url matches what
+  2. If the redirect_url matches what was given to the IDP at the time of registration, then the IDP appends a code(url safe alphanumeric string) to the client's url redirects to our relying party.
+  3. relying party exchanges token against this code.
+  4. now that we have tokens, namely id_tokens,access token and refresh token. you'd give away the access token but never refresh tokens.
+  5. once you have the id-tokens, your frontend can now safely use your protected resources. yayy.
+note:
+- never share your refresh tokens as that would mean client can keep refreshing their tokens till refresh tokens expire, which are usually long lived.
+- accesstokens are for applications to access resources that are consented to be accessed by the user like email,or your google photos.
 
 ## Local connector
 
 - local connector means that Dex will maintain its own database.
-- you could get down and read all the deployment files to understand what the fuss is about for kubernetes or you can just run a script that will do these things for you it can be found here [ADD GITHUB LINK](asdasdasdasdasd)
-- the process to setup connector mostly remains the same regardless of which Oauth2 provider you choose to go with.
+- the process to setup connector mostly remains the same regardless of which Oauth2 provider you choose to go with, but the process would vary for LDAP,SAML connectors.
 - you would get client-id and client-secret, while choosing redirect url of your own liking and scopes that you might need.
 
 ### Getting the tools
@@ -75,17 +80,17 @@ So your app only has to implement OIDC process for Dex, Dex will take care of th
 - ```
       ┌──────────────────────────────────────────────────────────────────────┐
       │ Docker                                                               │
-      │                           ┌─────────────────────────────────────┐    │
-      │                           │worker plane                         │    │
-      │                           │ ┌────┐      ┌────┐   ┌─────────┐    │    │
-      │    ┌──────────────┐       │ │KONG│      │DEX │   │POSTGRES │    │    │
-      │    │ control-plane│       │ └────┘      └────┘   └─────────┘    │    │
-      │    │  KinD        │       │                                     │    │
-      │    └──────────────┘       └─────────────────────────────────────┘    │
+      │    ┌──────────────┐       ┌─────────────────────────────────────┐    │
+      │    │ control-plane│       │worker node                          │    │
+      │    │  KinD        │       │ ┌────┐      ┌────┐   ┌─────────┐    │    │
+      │    └──────────────┘       │ │KONG│      │DEX │   │POSTGRES │    │    │
+      │                           │ └────┘      └────┘   └─────────┘    │    │
+      │                           │                                     │    │
+      │                           └─────────────────────────────────────┘    │
       │                                                                      │
       └──────────────────────────────────────────────────────────────────────┘
       ```
-- we will also use helmfile with [ADD_gotmpl_LINK]() format to deploy our application, for context this is like killing a mosquito with a nuke, because helmfile shines when you have a complex setup for your application, unlike our application, But we will still use this because its fun to learn complex things easily.
+- we will also use helmfile with format to deploy our application, for context this is like killing a mosquito with a nuke, because helmfile shines when you have a complex setup for your application, unlike our application, But we will still use this because its fun to learn complex things easily.
 
 ### Configurations
 
@@ -161,12 +166,12 @@ releases:
 
 ##### charts?
 
-- for any application to be deployed in your cluster, you need charts, charts are yaml files of deployment, service, ingress at its minimum.
+- for any application to be deployed in your cluster, you need charts, charts are yaml files of deployment, service, ingress at its minimum. they describe how your pod would be behaving in the cluster. pod is where your docker container is hosted, effectively your app would be running in a pod.
 - deployment is a yaml file that describes how much resources your application wants, resources could be pods, cpu
 - service is an abstraction for the application that will run in a production.
-- ingress is the biggest culprit before when your pod is running but still your requests wont be processed, its because none of your request are actually going to the pod.
+- ingress is the biggest culprit for when your pod is running but your requests wont be processed, its because none of your request are actually going to the pod.
 - in k8s everything is default deny so you request never reached the pod as ingress rules were not setup
-- here we're telling `helmfile` that hey, please install dex, kong, frontend app.
+- here we're telling `helmfile` that hey, please install dex, kong, frontend and backend apps, and their associated configurable values are present in the value, yaml.
 
 #### dex config
 
@@ -193,8 +198,7 @@ global:
   ingress:
     ingressClassName: kong
     host: localhost
-    # Controller URL is where Dex will be accessible from outside
-    controllerUrl: "http://dex-dex-server-http.auth.svc.cluster.local:5556"
+    controllerUrl: "http://dex-dex-server-http.auth.svc.cluster.local:5556" # this url is discoverable on the inside of cluster.
     annotations: {}
 
 # Dex database name
@@ -227,7 +231,6 @@ staticPasswords:
 # Additional static clients for OAuth2
 additionalStaticClients:
   - id: local-client
-    public: true
     name: "Local Development Client"
     redirectURIs:
       - "http://localhost:8000/api/auth/callback"
@@ -273,3 +276,6 @@ dex:
 ## DEMO
 
 ![dex-local-login-demo](/images/dexLogin.gif)
+
+- in the next article we will cover how you can onboard Microsoft Oauth2 with dex.
+*PS: AI was used for proof reading and ensuring technical accuracy but never to generate the sentences you read.*
