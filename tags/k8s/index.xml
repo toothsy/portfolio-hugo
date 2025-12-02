@@ -1,10 +1,10 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>K8s on Atharva CJ's place</title><link>https://acjoshi.dev/tags/k8s/</link><description>Recent content in K8s on Atharva CJ's place</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Tue, 02 Dec 2025 02:32:33 +0000</lastBuildDate><atom:link href="https://acjoshi.dev/tags/k8s/index.xml" rel="self" type="application/rss+xml"/><item><title>Getting started with OIDC and Dex with kind</title><link>https://acjoshi.dev/post/getting-started-with-oidc/</link><pubDate>Sat, 08 Nov 2025 18:00:00 +0530</pubDate><guid>https://acjoshi.dev/post/getting-started-with-oidc/</guid><description>&lt;ul>
-&lt;li>this article covers how you can setup a local cluster in with kind (not rudely), the next one would cover GitHub Oauth process.&lt;/li>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>K8s on Atharva CJ's place</title><link>https://acjoshi.dev/tags/k8s/</link><description>Recent content in K8s on Atharva CJ's place</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Tue, 02 Dec 2025 03:06:15 +0000</lastBuildDate><atom:link href="https://acjoshi.dev/tags/k8s/index.xml" rel="self" type="application/rss+xml"/><item><title>Getting started with OIDC and Dex with kind</title><link>https://acjoshi.dev/post/getting-started-with-oidc/</link><pubDate>Sat, 08 Nov 2025 18:00:00 +0530</pubDate><guid>https://acjoshi.dev/post/getting-started-with-oidc/</guid><description>&lt;ul>
+&lt;li>this article covers how you can setup a local cluster in with kind (not rudely), the next one would cover Microsoft Oauth process.&lt;/li>
 &lt;/ul>
-&lt;h2 id="oidcintro">OIDC?(Intro)&lt;/h2>
+&lt;h2 id="oidc">OIDC?&lt;/h2>
 &lt;ul>
-&lt;li>Open IDentity Connect is a AUTHENTICATION protocol that is built on top of Oauth2.&lt;/li>
 &lt;li>Oauth2 is primarily a AUTHORIZATION protocol.(The capitalization is more a reminder to myself than the reader)&lt;/li>
+&lt;li>OpenID Connect is a AUTHENTICATION protocol that is built on top of Oauth2, effectively making it handle both.&lt;/li>
 &lt;li>OIDC is the reason why you get that shiny &amp;ldquo;Sign in with Google&amp;rdquo; or Microsoft, or Facebook button in different applications you see.&lt;/li>
 &lt;/ul>
 &lt;h2 id="why-do-i-need-dex">Why do I need dex?&lt;/h2>
@@ -21,7 +21,7 @@
 &lt;li>Dex would talk to other OIDC providers and your application remains agnostic about the different providers, your application only knows about Dex and the tokens Dex gives.&lt;/li>
 &lt;li>Dex comes with a local installation too, which means that the source of truth for authentication is its own database, you can interact with this service via grpc calls.&lt;/li>
 &lt;li>You can configure the storage options as described &lt;a href="https://dexidp.io/docs/configuration/storage/">here&lt;/a>&lt;/li>
-&lt;li>Oauth2 is the only protocol your application needs to support, the upstream connector can be anything, LDAP,SAML,OAUTH,here&amp;rsquo;s the exhaustive &lt;a href="https://dexidp.io/docs/connectors/">list&lt;/a>.
+&lt;li>Dex&amp;rsquo;s OIDC is the only protocol your application needs to support, the upstream connector can be anything, LDAP,SAML,OAUTH,here&amp;rsquo;s the exhaustive &lt;a href="https://dexidp.io/docs/connectors/">list&lt;/a>.
 Connector is basically the place where Dex will go to for getting the user credentials verified.
 So your app only has to implement OIDC process for Dex, Dex will take care of the rest.&lt;/li>
 &lt;/ul>
