@@ -4,6 +4,7 @@ draft = false
 title = 'Getting started with OIDC and Dex with kind'
 pin = true
 tags = ["dex","oidc","OAuth2", "kong", "postgres", "k8s", "kubernetes", "docker", "helm", "helmfile", "kind"]
+summary = "this article covers how you can setup a local cluster in with kind (not rudely), the next one would cover Microsoft Oauth process."
 +++
 
 - this article covers how you can setup a local cluster in with kind (not rudely), the next one would cover Microsoft Oauth process.
@@ -11,8 +12,9 @@ tags = ["dex","oidc","OAuth2", "kong", "postgres", "k8s", "kubernetes", "docker"
 ## OIDC?
 
 - Oauth2 is primarily a AUTHORIZATION protocol.(The capitalization is more a reminder to myself than the reader)
-- OpenID Connect is a AUTHENTICATION protocol that is built on top of Oauth2, effectively making it handle both.
+- Open IDentity Connect is a AUTHENTICATION protocol that is built on top of Oauth2, effectively making it handle both.
 - OIDC is the reason why you get that shiny "Sign in with Google" or Microsoft, or Facebook button in different applications you see.
+![like this one](/images/signin-with-google.png)
 
 ## Why do I need dex?
 
@@ -20,6 +22,8 @@ tags = ["dex","oidc","OAuth2", "kong", "postgres", "k8s", "kubernetes", "docker"
 - So you set out on a journey to implement google Oauth2  by going to google console, registering your app, getting your client id and secret and start using it for your app.
 - Luck is on your side and your application is growing popular, now you want to on onboard facebook users. But oh no!! your application is hard coded with google endpoints for authentication, so you pile up some technical debt and hardcode your facebook endpoint.
 - As days pass you realise you maybe need Microsoft Oauth as well, and you finally realise maybe it was a bad idea to hard code facebook Oauth2, as your authentication endpoints keep increasing and it becomes a hassle to maintain dev,stage, and prod credentials of your application.
+
+![like this one](/images/signin-with-bunch.png)
 
 ## What is Dex?
 
@@ -48,11 +52,13 @@ So your app only has to implement OIDC process for Dex, Dex will take care of th
   1. user clicks on "Sign in with GitHub", this triggers a call to GitHub with your client-id, redirect_url, scope.
   2. If the redirect_url matches what was given to the IDP at the time of registration, then the IDP appends a code(url safe alphanumeric string) to the client's url redirects to our relying party.
   3. relying party exchanges token against this code.
-  4. now that we have tokens, namely id_tokens,access token and refresh token. you'd give away the access token but never refresh tokens.
-  5. once you have the id-tokens, your frontend can now safely use your protected resources. yayy.
-note:
-- never share your refresh tokens as that would mean client can keep refreshing their tokens till refresh tokens expire, which are usually long lived.
-- accesstokens are for applications to access resources that are consented to be accessed by the user like email,or your google photos.
+  4. now that we have tokens, namely id_tokens,access token and refresh token. you'd give away the id tokens to user but never refresh tokens.
+  5. once you have the id-tokens, your frontend can now be trusted to be who they claim to be. yayy!!!
+- the id tokens look something like this:
+  - ![jwt-example](/images/jwt-example.png)
+- NOTE:
+  - never share your refresh tokens as that would mean client can keep refreshing their tokens till refresh tokens expire, which are usually long lived.
+  - access tokens are for applications to access resources that are consented to be accessed by the user like email,or your google photos.
 
 ## Local connector
 
@@ -166,12 +172,12 @@ releases:
 
 ##### charts?
 
-- for any application to be deployed in your cluster, you need charts, charts are yaml files of deployment, service, ingress at its minimum. they describe how your pod would be behaving in the cluster. pod is where your docker container is hosted, effectively your app would be running in a pod.
-- deployment is a yaml file that describes how much resources your application wants, resources could be pods, cpu
-- service is an abstraction for the application that will run in a production.
-- ingress is the biggest culprit for when your pod is running but your requests wont be processed, its because none of your request are actually going to the pod.
-- in k8s everything is default deny so you request never reached the pod as ingress rules were not setup
-- here we're telling `helmfile` that hey, please install dex, kong, frontend and backend apps, and their associated configurable values are present in the value, yaml.
+- For any application to be deployed in your cluster, you need charts, charts are yaml files of deployment, service, ingress at its minimum. They describe how your pod would be behaving in the cluster. Pod is where your docker container is hosted, effectively your app would be running in a pod.
+  - Deployment is a yaml file that describes how much resources your application wants, resources could be pods, cpu
+  - Service is an abstraction for the application that will run in a production.
+  - Ingress is the biggest culprit for when your pod is running but your requests wont be processed, its because none of your request are actually going to the pod.
+  - In ingress your incoming rules need to be setup explicitly, therefore your request never reached the pod if no ingress rules were defined.
+- Here we're telling `helmfile` that hey, please install dex, kong, frontend and backend apps, and their associated configurable values are present in the `value.yaml`.
 
 #### dex config
 
@@ -184,10 +190,10 @@ global:
   database:
     host: postgres.postgres.svc.cluster.local
     port: 5432
-    username: dex
     ssl:
       mode: disable
     createDatabase: true
+    username: dex
 
   # Database secret for password
   databaseSecret:
@@ -230,10 +236,6 @@ staticPasswords:
 
 # Additional static clients for OAuth2
 additionalStaticClients:
-  - id: local-client
-    name: "Local Development Client"
-    redirectURIs:
-      - "http://localhost:8000/api/auth/callback"
 
   - id: backend-client
     public: false
@@ -278,4 +280,4 @@ dex:
 ![dex-local-login-demo](/images/dexLogin.gif)
 
 - in the next article we will cover how you can onboard Microsoft Oauth2 with dex.
-*PS: AI was used for proof reading and ensuring technical accuracy but never to generate the sentences you read.*
+- *PS: AI was used for proof reading and ensuring technical accuracy but never to generate the sentences you read.*
