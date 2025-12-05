@@ -62,7 +62,7 @@ So your app only has to implement OIDC process for Dex, Dex will take care of th
 - the id tokens look something like this:
 
 <p align="center">
-  <img alr="a jwt token decoded showing email, issuer and other important info" src="/images/jwt-example.png" width="500"/>
+  <img alt="a jwt token decoded showing email, issuer and other important info" src="/images/jwt-example.png" width="500"/>
 <p/>
 
 - [jwt.io](https://jwt.io) would be your goto page for your jwt needs.
