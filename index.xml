@@ -65,10 +65,9 @@ So your app only has to implement OIDC process for Dex, Dex will take care of th
 &lt;p/>
 &lt;ul>
 &lt;li>&lt;a href="https://jwt.io">jwt.io&lt;/a> would be your goto page for your jwt needs.&lt;/li>
-&lt;li>&lt;/li>
 &lt;li>NOTE:
 &lt;ul>
-&lt;li>never share your refresh tokens as that would mean client can keep refreshing their tokens till refresh tokens expire, which are usually long lived.&lt;/li>
+&lt;li>Always share a opaque session id string that would be tied to your refresh token, never share your refresh tokens as that would mean client can keep refreshing their tokens till refresh tokens expire, which are usually like week long.&lt;/li>
 &lt;li>access tokens are for applications to access resources that are consented to be accessed by the user like email,or your google photos.&lt;/li>
 &lt;/ul>
 &lt;/li>
@@ -359,46 +358,4 @@ With that out of the way, onto the main issue at hand, young padawan.&lt;/li>
 &lt;li>&lt;a href="https://news.ycombinator.com/item?id=14668955">This Y Combinator discussion was quite insightful&lt;/a>&lt;/li>
 &lt;li>I may or may not have taken things from this &lt;a href="https://stackoverflow.com/questions/16010694/how-golangs-defer-capture-closures-parameter">Stack Overflow question&lt;/a>&lt;/li>
 &lt;/ul>
-&lt;p>Thanks for reading and hope you have a great day 😁&lt;/p></description></item><item><title>About</title><link>https://acjoshi.dev/about/</link><pubDate>Wed, 01 Jan 2025 00:00:00 +0000</pubDate><guid>https://acjoshi.dev/about/</guid><description>&lt;h1 id="about-me-">About Me ✨&lt;/h1>
-&lt;p>A backend-heavy full-stack developer who enjoys working on cloud applications and infrastructure. Proficient in &lt;strong>performance optimization, security vigilance, and automation&lt;/strong>. Currently diving deeper into &lt;strong>MCP&lt;/strong> for &lt;strong>AI&lt;/strong> to stay ahead in the ever-evolving tech space. Always ready for a new challenge and excited to innovate! 🤩🔥&lt;/p>
-&lt;h2 id="-technical-skills">🛠️ Technical Skills&lt;/h2>
-&lt;ul>
-&lt;li>&lt;strong>AI:&lt;/strong> MCP👀,Deepseek-r1🌊, ollama🦙&lt;/li>
-&lt;li>&lt;strong>Languages:&lt;/strong> Go (Golang) 🐹, JavaScript 🛠️, C# 🔷, Java ☕&lt;/li>
-&lt;li>&lt;strong>Frontend:&lt;/strong> React ⚛️, HTML &amp;amp; CSS 🎨, Flutter 📱,Hugo 🚀&lt;/li>
-&lt;li>&lt;strong>Backend:&lt;/strong> Golang, C# APIs 🔌, REST API 🌍&lt;/li>
-&lt;li>&lt;strong>Cloud &amp;amp; Infrastructure:&lt;/strong> Kubernetes ☁️, Docker 🐳&lt;/li>
-&lt;li>&lt;strong>Automation &amp;amp; CI/CD:&lt;/strong> GitHub Pipelines 🔄, GitHub REST API 📡, Bash &amp;amp; Linux Scripting 🖥️&lt;/li>
-&lt;li>&lt;strong>Security &amp;amp; Code Quality:&lt;/strong> Sonar 🔍, Security Monitoring 🛡️&lt;/li>
-&lt;li>&lt;strong>Databases:&lt;/strong> MySQL 🗄️, MSSQL 🏢&lt;/li>
-&lt;li>&lt;strong>Version Control:&lt;/strong> Git 🔧, TFVC 📂&lt;/li>
-&lt;/ul>
-&lt;h2 id="-books-ive-read">📚 Books I&amp;rsquo;ve Read&lt;/h2>
-&lt;p>I enjoy reading both technical and non-technical books to broaden my knowledge and perspective. Some of my favorites include:&lt;/p>
-&lt;ul>
-&lt;li>&lt;strong>Atomic Habits&lt;/strong> by James Clear 🏆 – A deep dive into habit formation and productivity.&lt;/li>
-&lt;li>&lt;strong>Head First Design Patterns&lt;/strong> by Eric Freeman &amp;amp; Elisabeth Robson 🎨 – A fun and engaging way to understand design patterns.&lt;/li>
-&lt;li>&lt;strong>Perfect Run&lt;/strong> by Maxime J. Durand 🔄 – A thrilling mix of strategy and action.&lt;/li>
-&lt;li>&lt;strong>Shadow Slave&lt;/strong> by Guiltythree 🦇 – An immersive and unique progression fantasy novel.&lt;/li>
-&lt;/ul></description></item><item><title/><link>https://acjoshi.dev/readme/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://acjoshi.dev/readme/</guid><description>&lt;h1 id="about-me-">About Me ✨&lt;/h1>
-&lt;p>A backend-heavy full-stack developer who enjoys working on cloud applications and infrastructure. Proficient in &lt;strong>performance optimization, security vigilance, and automation&lt;/strong>. Currently diving deeper into &lt;strong>MCP&lt;/strong> for &lt;strong>AI&lt;/strong> to stay ahead in the ever-evolving tech space. Always ready for a new challenge and excited to innovate! 🤩🔥&lt;/p>
-&lt;h2 id="-technical-skills">🛠️ Technical Skills&lt;/h2>
-&lt;ul>
-&lt;li>&lt;strong>AI:&lt;/strong> MCP👀,Deepseek-r1🌊, ollama🦙&lt;/li>
-&lt;li>&lt;strong>Languages:&lt;/strong> Go (Golang) 🐹, JavaScript 🛠️, C# 🔷, Java ☕&lt;/li>
-&lt;li>&lt;strong>Frontend:&lt;/strong> React ⚛️, HTML &amp;amp; CSS 🎨, Flutter 📱,Hugo 🚀&lt;/li>
-&lt;li>&lt;strong>Backend:&lt;/strong> Golang, C# APIs 🔌, REST API 🌍&lt;/li>
-&lt;li>&lt;strong>Cloud &amp;amp; Infrastructure:&lt;/strong> Kubernetes ☁️, Docker 🐳&lt;/li>
-&lt;li>&lt;strong>Automation &amp;amp; CI/CD:&lt;/strong> GitHub Pipelines 🔄, GitHub REST API 📡, Bash &amp;amp; Linux Scripting 🖥️&lt;/li>
-&lt;li>&lt;strong>Security &amp;amp; Code Quality:&lt;/strong> Sonar 🔍, Security Monitoring 🛡️&lt;/li>
-&lt;li>&lt;strong>Databases:&lt;/strong> MySQL 🗄️, MSSQL 🏢&lt;/li>
-&lt;li>&lt;strong>Version Control:&lt;/strong> Git 🔧, TFVC 📂&lt;/li>
-&lt;/ul>
-&lt;h2 id="-books-ive-read">📚 Books I&amp;rsquo;ve Read&lt;/h2>
-&lt;p>I enjoy reading both technical and non-technical books to broaden my knowledge and perspective. Some of my favorites include:&lt;/p>
-&lt;ul>
-&lt;li>&lt;strong>Atomic Habits&lt;/strong> by James Clear 🏆 – A deep dive into habit formation and productivity.&lt;/li>
-&lt;li>&lt;strong>Head First Design Patterns&lt;/strong> by Eric Freeman &amp;amp; Elisabeth Robson 🎨 – A fun and engaging way to understand design patterns.&lt;/li>
-&lt;li>&lt;strong>Perfect Run&lt;/strong> by Maxime J. Durand 🔄 – A thrilling mix of strategy and action.&lt;/li>
-&lt;li>&lt;strong>Shadow Slave&lt;/strong> by Guiltythree 🦇 – An immersive and unique progression fantasy novel.&lt;/li>
-&lt;/ul></description></item></channel></rss>
+&lt;p>Thanks for reading and hope you have a great day 😁&lt;/p></description></item></channel></rss>
