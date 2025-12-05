@@ -16,7 +16,7 @@ summary = "this article covers how you can setup a local cluster in with kind (n
 - OIDC is the reason why you get that shiny "Sign in with Google" or Microsoft, or Facebook button in different applications you see.
 
 <p align="center">
-  <img src="/images/signin-with-google.png" width="300" style="border-radius:35px" />
+  <img alt="sign in with google photo" src="/images/signin-with-google.png" width="300" style="border-radius:35px" />
 <p/>
 
 ## What is Dex?
@@ -38,7 +38,7 @@ So your app only has to implement OIDC process for Dex, Dex will take care of th
 - As days pass you realise you maybe need Microsoft Oauth as well, and you finally realise maybe it was a bad idea to hard code facebook Oauth2, as your authentication endpoints keep increasing and it becomes a hassle to maintain dev,stage, and prod credentials of your application.
 
 <p align="center">
-  <img src="/images/signin-with-bunch.png" width="300"  />
+  <img alt="example photo showing bunch of sign in like facebook, goolge, dropbox etc" src="/images/signin-with-bunch.png" width="300"  />
 <p/>
 
 ## But what is OIDC, technically?
@@ -62,7 +62,7 @@ So your app only has to implement OIDC process for Dex, Dex will take care of th
 - the id tokens look something like this:
 
 <p align="center">
-  <img src="/images/jwt-example.png" width="500"/>
+  <img alr="a jwt token decoded showing email, issuer and other important info" src="/images/jwt-example.png" width="500"/>
 <p/>
 
 - [jwt.io](https://jwt.io) would be your goto page for your jwt needs.
