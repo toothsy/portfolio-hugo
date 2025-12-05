@@ -14,16 +14,10 @@ summary = "this article covers how you can setup a local cluster in with kind (n
 - Oauth2 is primarily a AUTHORIZATION protocol.(The capitalization is more a reminder to myself than the reader)
 - Open IDentity Connect is a AUTHENTICATION protocol that is built on top of Oauth2, effectively making it handle both.
 - OIDC is the reason why you get that shiny "Sign in with Google" or Microsoft, or Facebook button in different applications you see.
-![like this one](/images/signin-with-google.png)
 
-## Why do I need dex?
-
-- Imagine this you have built your cool application and it has a standard login page that accepts email and password. But its 2025 now and you feel you need to ease the process by having a google sign in button.
-- So you set out on a journey to implement google Oauth2  by going to google console, registering your app, getting your client id and secret and start using it for your app.
-- Luck is on your side and your application is growing popular, now you want to on onboard facebook users. But oh no!! your application is hard coded with google endpoints for authentication, so you pile up some technical debt and hardcode your facebook endpoint.
-- As days pass you realise you maybe need Microsoft Oauth as well, and you finally realise maybe it was a bad idea to hard code facebook Oauth2, as your authentication endpoints keep increasing and it becomes a hassle to maintain dev,stage, and prod credentials of your application.
-
-![like this one](/images/signin-with-bunch.png)
+<p align="center">
+  <img src="/images/signin-with-google.png" width="300" style="border-radius:35px" />
+<p/>
 
 ## What is Dex?
 
@@ -36,11 +30,22 @@ summary = "this article covers how you can setup a local cluster in with kind (n
 Connector is basically the place where Dex will go to for getting the user credentials verified.
 So your app only has to implement OIDC process for Dex, Dex will take care of the rest.
 
+## Why do I need dex?
+
+- Imagine this you have built your cool application and it has a standard login page that accepts email and password. But its 2025 now and you feel you need to ease the process by having a google sign in button.
+- So you set out on a journey to implement google Oauth2  by going to google console, registering your app, getting your client id and secret and start using it for your app.
+- Luck is on your side and your application is growing popular, now you want to on onboard facebook users. But oh no!! your application is hard coded with google endpoints for authentication, so you pile up some technical debt and hardcode your facebook endpoint.
+- As days pass you realise you maybe need Microsoft Oauth as well, and you finally realise maybe it was a bad idea to hard code facebook Oauth2, as your authentication endpoints keep increasing and it becomes a hassle to maintain dev,stage, and prod credentials of your application.
+
+<p align="center">
+  <img src="/images/signin-with-bunch.png" width="300"  />
+<p/>
+
 ## But what is OIDC, technically?
 
-- before i summarise briefly how an OIDC flow looks like, lets get on the same page about terminology for clarity.
-  - your app will be called relying party, think of it like you are relying on GitHub.
-  - GitHub will be called Identity provider.
+- Before i summarise briefly how an OIDC flow looks like, lets get on the same page about terminology for clarity.
+  - your app will be called relying party, think of it like you are relying on Microsoft.
+  - Microsoft will be called Identity provider.
   - your users would be called plain old users.
   - token here refers to a JSON Web Token. (they are signed tokens that gets passed around)
   - client-id and client-secret are things you would get from the identity provider you have registered against.
@@ -49,13 +54,17 @@ So your app only has to implement OIDC process for Dex, Dex will take care of th
   - scope, this defines what relying party will access.for example name, email etc.
 - Alright then lets get on already:
 
-  1. user clicks on "Sign in with GitHub", this triggers a call to GitHub with your client-id, redirect_url, scope.
+  1. user clicks on "Sign in with Microsoft", this triggers a call to Microsoft with your client-id, redirect_url, scope.
   2. If the redirect_url matches what was given to the IDP at the time of registration, then the IDP appends a code(url safe alphanumeric string) to the client's url redirects to our relying party.
   3. relying party exchanges token against this code.
   4. now that we have tokens, namely id_tokens,access token and refresh token. you'd give away the id tokens to user but never refresh tokens.
   5. once you have the id-tokens, your frontend can now be trusted to be who they claim to be. yayy!!!
 - the id tokens look something like this:
-  - ![jwt-example](/images/jwt-example.png)
+
+<p align="center">
+  <img src="/images/jwt-example.png" width="500"/>
+<p/>
+
 - NOTE:
   - never share your refresh tokens as that would mean client can keep refreshing their tokens till refresh tokens expire, which are usually long lived.
   - access tokens are for applications to access resources that are consented to be accessed by the user like email,or your google photos.

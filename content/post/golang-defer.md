@@ -4,6 +4,7 @@ draft = false
 title = 'Golang Defer'
 pin = false
 tags = ["golang","closure","defer"]
+summary = "This article covers the basics of defer and closure in golang."
 +++
 
 # Defer And Closure in Go-lang
@@ -16,7 +17,7 @@ Hello, fellow internet user, before we begin, this article assumes you have the 
 - Have an understanding of the local and global scope
 - Have your VS Code setup for Go-lang, because it'll be a delightful experience with autocomplete, linting, and auto-imports
 With that out of the way, onto the main issue at hand, young padawan.
-<!--more-->
+
 ## Just what is defer all about?
 
 Just so we're on the same page, you **always** use the `defer` keyword on a function call. Now, what `defer` means is that the execution of the deferred function is delayed till the end of the surrounding function.
