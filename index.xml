@@ -1,4 +1,365 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Experience on Atharva CJ's place</title><link>https://acjoshi.dev/</link><description>Recent content in Experience on Atharva CJ's place</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Fri, 05 Dec 2025 03:00:18 +0000</lastBuildDate><atom:link href="https://acjoshi.dev/index.xml" rel="self" type="application/rss+xml"/><item><title>Getting started with OIDC and Dex with kind</title><link>https://acjoshi.dev/post/getting-started-with-oidc/</link><pubDate>Sat, 08 Nov 2025 18:00:00 +0530</pubDate><guid>https://acjoshi.dev/post/getting-started-with-oidc/</guid><description>this article covers how you can setup a local cluster in with kind (not rudely), the next one would cover Microsoft Oauth process.</description></item><item><title>Golang Defer</title><link>https://acjoshi.dev/post/golang-defer/</link><pubDate>Sat, 29 Mar 2025 17:17:21 +0530</pubDate><guid>https://acjoshi.dev/post/golang-defer/</guid><description>This article covers the basics of defer and closure in golang.</description></item><item><title>About</title><link>https://acjoshi.dev/about/</link><pubDate>Wed, 01 Jan 2025 00:00:00 +0000</pubDate><guid>https://acjoshi.dev/about/</guid><description>&lt;h1 id="about-me-">About Me ✨&lt;/h1>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Experience on Atharva CJ's place</title><link>https://acjoshi.dev/</link><description>Recent content in Experience on Atharva CJ's place</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Wed, 01 Jan 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://acjoshi.dev/index.xml" rel="self" type="application/rss+xml"/><item><title>Getting started with OIDC and Dex with kind</title><link>https://acjoshi.dev/post/getting-started-with-oidc/</link><pubDate>Sat, 08 Nov 2025 18:00:00 +0530</pubDate><guid>https://acjoshi.dev/post/getting-started-with-oidc/</guid><description>&lt;ul>
+&lt;li>this article covers how you can setup a local cluster in with kind (not rudely), the next one would cover Microsoft Oauth process.&lt;/li>
+&lt;/ul>
+&lt;h2 id="oidc">OIDC?&lt;/h2>
+&lt;ul>
+&lt;li>Oauth2 is primarily a AUTHORIZATION protocol.(The capitalization is more a reminder to myself than the reader)&lt;/li>
+&lt;li>Open IDentity Connect is a AUTHENTICATION protocol that is built on top of Oauth2, effectively making it handle both.&lt;/li>
+&lt;li>OIDC is the reason why you get that shiny &amp;ldquo;Sign in with Google&amp;rdquo; or Microsoft, or Facebook button in different applications you see.&lt;/li>
+&lt;/ul>
+&lt;p align="center">
+&lt;img src="https://acjoshi.dev/images/signin-with-google.png" width="300" style="border-radius:35px" />
+&lt;p/>
+&lt;h2 id="what-is-dex">What is Dex?&lt;/h2>
+&lt;ul>
+&lt;li>&lt;a href="https://dexidp.io/">dex&lt;/a> is an open source project that aims to simplify authentication for applications.&lt;/li>
+&lt;li>Imagine this, you only had to deal with OIDC once (Ideally never would be nice, but its never ideal is it) and someone else took care of every other OIDC providers.&lt;/li>
+&lt;li>Dex would talk to other OIDC providers and your application remains agnostic about the different providers, your application only knows about Dex and the tokens Dex gives.&lt;/li>
+&lt;li>Dex comes with a local installation too, which means that the source of truth for authentication is its own database, you can interact with this service via grpc calls.&lt;/li>
+&lt;li>You can configure the storage options as described &lt;a href="https://dexidp.io/docs/configuration/storage/">here&lt;/a>&lt;/li>
+&lt;li>Dex&amp;rsquo;s OIDC is the only protocol your application needs to support, the upstream connector can be anything, LDAP,SAML,OAUTH,here&amp;rsquo;s the exhaustive &lt;a href="https://dexidp.io/docs/connectors/">list&lt;/a>.
+Connector is basically the place where Dex will go to for getting the user credentials verified.
+So your app only has to implement OIDC process for Dex, Dex will take care of the rest.&lt;/li>
+&lt;/ul>
+&lt;h2 id="why-do-i-need-dex">Why do I need dex?&lt;/h2>
+&lt;ul>
+&lt;li>Imagine this you have built your cool application and it has a standard login page that accepts email and password. But its 2025 now and you feel you need to ease the process by having a google sign in button.&lt;/li>
+&lt;li>So you set out on a journey to implement google Oauth2 by going to google console, registering your app, getting your client id and secret and start using it for your app.&lt;/li>
+&lt;li>Luck is on your side and your application is growing popular, now you want to on onboard facebook users. But oh no!! your application is hard coded with google endpoints for authentication, so you pile up some technical debt and hardcode your facebook endpoint.&lt;/li>
+&lt;li>As days pass you realise you maybe need Microsoft Oauth as well, and you finally realise maybe it was a bad idea to hard code facebook Oauth2, as your authentication endpoints keep increasing and it becomes a hassle to maintain dev,stage, and prod credentials of your application.&lt;/li>
+&lt;/ul>
+&lt;p align="center">
+&lt;img src="https://acjoshi.dev/images/signin-with-bunch.png" width="300" />
+&lt;p/>
+&lt;h2 id="but-what-is-oidc-technically">But what is OIDC, technically?&lt;/h2>
+&lt;ul>
+&lt;li>
+&lt;p>Before i summarise briefly how an OIDC flow looks like, lets get on the same page about terminology for clarity.&lt;/p>
+&lt;ul>
+&lt;li>your app will be called relying party, think of it like you are relying on Microsoft.&lt;/li>
+&lt;li>Microsoft will be called Identity provider.&lt;/li>
+&lt;li>your users would be called plain old users.&lt;/li>
+&lt;li>token here refers to a JSON Web Token. (they are signed tokens that gets passed around)&lt;/li>
+&lt;li>client-id and client-secret are things you would get from the identity provider you have registered against.&lt;/li>
+&lt;li>redirect_url, this is the place identity provider will tell the user to go after they have successfully logged in with their creds.&lt;/li>
+&lt;li>consent screen, this refers to the time when users login for the first time and identity provider wants to let the user know what the relying party wants to access.&lt;/li>
+&lt;li>scope, this defines what relying party will access.for example name, email etc.&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>Alright then lets get on already:&lt;/p>
+&lt;ol>
+&lt;li>user clicks on &amp;ldquo;Sign in with Microsoft&amp;rdquo;, this triggers a call to Microsoft with your client-id, redirect_url, scope.&lt;/li>
+&lt;li>If the redirect_url matches what was given to the IDP at the time of registration, then the IDP appends a code(url safe alphanumeric string) to the client&amp;rsquo;s url redirects to our relying party.&lt;/li>
+&lt;li>relying party exchanges token against this code.&lt;/li>
+&lt;li>now that we have tokens, namely id_tokens,access token and refresh token. you&amp;rsquo;d give away the id tokens to user but never refresh tokens.&lt;/li>
+&lt;li>once you have the id-tokens, your frontend can now be trusted to be who they claim to be. yayy!!!&lt;/li>
+&lt;/ol>
+&lt;/li>
+&lt;li>
+&lt;p>the id tokens look something like this:&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;p align="center">
+&lt;img src="https://acjoshi.dev/images/jwt-example.png" width="500"/>
+&lt;p/>
+&lt;ul>
+&lt;li>&lt;a href="https://jwt.io">jwt.io&lt;/a> would be your goto page for your jwt needs.&lt;/li>
+&lt;li>&lt;/li>
+&lt;li>NOTE:
+&lt;ul>
+&lt;li>never share your refresh tokens as that would mean client can keep refreshing their tokens till refresh tokens expire, which are usually long lived.&lt;/li>
+&lt;li>access tokens are for applications to access resources that are consented to be accessed by the user like email,or your google photos.&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="local-connector">Local connector&lt;/h2>
+&lt;ul>
+&lt;li>local connector means that Dex will maintain its own database.&lt;/li>
+&lt;li>the process to setup connector mostly remains the same regardless of which Oauth2 provider you choose to go with, but the process would vary for LDAP,SAML connectors.&lt;/li>
+&lt;li>you would get client-id and client-secret, while choosing redirect url of your own liking and scopes that you might need.&lt;/li>
+&lt;/ul>
+&lt;h3 id="getting-the-tools">Getting the tools&lt;/h3>
+&lt;ul>
+&lt;li>
+&lt;p>you would need these cli tools&lt;/p>
+&lt;ul>
+&lt;li>&lt;a href="https://docs.docker.com/engine/install/">docker(where your kubernetes cluster would reside)&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://kind.sigs.k8s.io/docs/user/quick-start/#installation">kind (Kubernetes IN Docker)&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://kubernetes.io/docs/tasks/tools/">kubectl (Primarily how would interact with your cluster)&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://helm.sh/docs/intro/install/">helm (think its like package manager for kubernetes)&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://github.com/helmfile/helmfile?tab=readme-ov-file#installation">helmfile(to handle different environments)&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://github.com/databus23/helm-diff?tab=readme-ov-file#install">helm-diff(for helmfile to know what changed)&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>You can find the code for all of this &lt;a href="https://github.com/toothsy/dex-oidc-demo">here&lt;/a>&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="architecture">Architecture&lt;/h3>
+&lt;ul>
+&lt;li>
+&lt;p>We will deploy our Dex instance behind a Kong gateway in a kind cluster, reason being that Dex is built for production, so you&amp;rsquo;d follow similar patterns when you use it in your actual project.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>once you understand how to deploy locally in kind, production is merely some endpoint changes away.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;pre tabindex="0">&lt;code> ┌──────────────────────────────────────────────────────────────────────┐
+│ Docker │
+│ ┌──────────────┐ ┌─────────────────────────────────────┐ │
+│ │ control-plane│ │worker node │ │
+│ │ KinD │ │ ┌────┐ ┌────┐ ┌─────────┐ │ │
+│ └──────────────┘ │ │KONG│ │DEX │ │POSTGRES │ │ │
+│ │ └────┘ └────┘ └─────────┘ │ │
+│ │ │ │
+│ └─────────────────────────────────────┘ │
+│ │
+└──────────────────────────────────────────────────────────────────────┘
+```
+&lt;/code>&lt;/pre>&lt;/li>
+&lt;li>
+&lt;p>we will also use helmfile with format to deploy our application, for context this is like killing a mosquito with a nuke, because helmfile shines when you have a complex setup for your application, unlike our application, But we will still use this because its fun to learn complex things easily.&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="configurations">Configurations&lt;/h3>
+&lt;h4 id="cluster-config">cluster config&lt;/h4>
+&lt;ul>
+&lt;li>following helmfile describes the list of all the things kubernetes needs to install for our application.&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-yaml" data-lang="yaml">&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="nt">environments&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">default&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">values&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>- &lt;span class="l">values.yaml&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="nn">---&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="nt">repositories&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">kong&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">url&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">https://charts.konghq.com&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="nt">releases&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">kong&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">namespace&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">kong&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">createNamespace&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kc">true&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">chart&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">kong/kong&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">version&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">~2.51.0 &lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="c"># or latest stable, check via `helm search repo kong/kong`&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">set&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">ingressControllerCRDs&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">value&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kc">false&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">values&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>- &lt;span class="l">kong-values.yaml&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">postgres&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">namespace&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">postgres&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">labels&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">app&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">postgres&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">tier&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">core&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">version&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="m">16.0.3&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">chart&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">oci://registry-1.docker.io/bitnamicharts/postgresql&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">set&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">nameOverride&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">value&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">postgres&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">auth.database&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">value&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">ps_db&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">auth.username&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">value&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>{{&lt;span class="w"> &lt;/span>&lt;span class="l">.Values.postgres.user }}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">auth.password&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">value&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>{{&lt;span class="w"> &lt;/span>&lt;span class="l">.Values.postgres.pass }}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">image.repository&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">value&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">bitnamilegacy/postgresql&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">dex&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">namespace&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">auth&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">createNamespace&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kc">true&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">chart&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">./charts/dex&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">values&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>- &lt;span class="l">dex-values.yaml&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">backend&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">namespace&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">auth&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">createNamespace&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kc">false&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">chart&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">./charts/backend&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">values&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>- &lt;span class="l">backend-values.yaml&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">needs&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>- &lt;span class="l">auth/dex&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">frontend&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">namespace&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">frontend&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">createNamespace&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kc">true&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">chart&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">./charts/frontend&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">values&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>- &lt;span class="l">frontend-values.yaml&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h5 id="charts">charts?&lt;/h5>
+&lt;ul>
+&lt;li>For any application to be deployed in your cluster, you need charts, charts are yaml files of deployment, service, ingress at its minimum. They describe how your pod would be behaving in the cluster. Pod is where your docker container is hosted, effectively your app would be running in a pod.
+&lt;ul>
+&lt;li>Deployment is a yaml file that describes how much resources your application wants, resources could be pods, cpu&lt;/li>
+&lt;li>Service is an abstraction for the application that will run in a production.&lt;/li>
+&lt;li>Ingress is the biggest culprit for when your pod is running but your requests wont be processed, its because none of your request are actually going to the pod.&lt;/li>
+&lt;li>In ingress your incoming rules need to be setup explicitly, therefore your request never reached the pod if no ingress rules were defined.&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>Here we&amp;rsquo;re telling &lt;code>helmfile&lt;/code> that hey, please install dex, kong, frontend and backend apps, and their associated configurable values are present in the &lt;code>value.yaml&lt;/code>.&lt;/li>
+&lt;/ul>
+&lt;h4 id="dex-config">dex config&lt;/h4>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-yaml" data-lang="yaml">&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="c"># Dex chart values - matching charts/dex/values.yaml structure&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="nt">global&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="c"># Database configuration for Dex&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">database&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">host&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">postgres.postgres.svc.cluster.local&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">port&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="m">5432&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">ssl&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">mode&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">disable&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">createDatabase&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kc">true&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">username&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">dex&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="c"># Database secret for password&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">databaseSecret&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">postgres&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">key&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">password&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="c"># Ingress configuration&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">ingress&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">ingressClassName&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">kong&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">host&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">localhost&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">controllerUrl&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s2">&amp;#34;http://dex-dex-server-http.auth.svc.cluster.local:5556&amp;#34;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="c"># this url is discoverable on the inside of cluster.&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">annotations&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>{}&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="c"># Dex database name&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="nt">database&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">database&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">ps_db&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="c"># HTTP port for Dex service&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="nt">httpPort&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="m">5556&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="c"># GRPC port for internal communication&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="nt">internalGrpcPort&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="m">8082&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="c"># Enable password database (local authentication)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="nt">enablePasswordDb&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kc">true&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="c"># OAuth2 configuration&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="nt">oauth2&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">passwordConnector&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">enable&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kc">true&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">value&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">local&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">responseTypes&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="s2">&amp;#34;code&amp;#34;&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="c"># Static passwords for local authentication&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="nt">staticPasswords&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>- &lt;span class="nt">email&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s2">&amp;#34;admin-dex@example.com&amp;#34;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">hash&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s2">&amp;#34;JDJhJDEyJEwycXBiTjRjNThHTHd1YXo4Wnhoa2UvSzF1cHMvWnVyRnhvNU9iRnAxQWhILmllNGdUNXZD&amp;#34;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="c"># bcrypt hash of &amp;#34;password&amp;#34;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">username&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s2">&amp;#34;admin&amp;#34;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">userID&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s2">&amp;#34;1&amp;#34;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="c"># Additional static clients for OAuth2&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="nt">additionalStaticClients&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>- &lt;span class="nt">id&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">backend-client&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">public&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kc">false&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">secret&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s2">&amp;#34;backend-secret-change-in-production&amp;#34;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s2">&amp;#34;Backend Auth Service&amp;#34;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">redirectURIs&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>- &lt;span class="s2">&amp;#34;http://localhost:8000/api/auth/callback&amp;#34;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="c"># Resource limits&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="nt">resources&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">requests&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">cpu&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s2">&amp;#34;100m&amp;#34;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">memory&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s2">&amp;#34;128Mi&amp;#34;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">limits&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">cpu&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s2">&amp;#34;250m&amp;#34;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">memory&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s2">&amp;#34;256Mi&amp;#34;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="c"># Liveness probe configuration&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="nt">livenessProbe&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">enabled&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kc">true&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">initialDelaySeconds&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="m">5&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">periodSeconds&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="m">10&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">timeoutSeconds&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="m">3&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">successThreshold&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="m">1&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">failureThreshold&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="m">5&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="c"># Replica count&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="nt">replicaCount&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="m">1&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="c"># Environment variables for dex container&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="nt">dex&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">env&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">PASSWORD_ENV_VAR&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">valueFrom&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">secretKeyRef&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">postgres&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">key&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">password&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="demo">DEMO&lt;/h2>
+&lt;p>&lt;img src="https://acjoshi.dev/images/dexLogin.gif" alt="dex-local-login-demo">&lt;/p>
+&lt;ul>
+&lt;li>in the next article we will cover how you can onboard Microsoft Oauth2 with dex.&lt;/li>
+&lt;li>&lt;em>PS: AI was used for proof reading and ensuring technical accuracy but never to generate the sentences you read.&lt;/em>&lt;/li>
+&lt;/ul></description></item><item><title>Golang Defer</title><link>https://acjoshi.dev/post/golang-defer/</link><pubDate>Sat, 29 Mar 2025 17:17:21 +0530</pubDate><guid>https://acjoshi.dev/post/golang-defer/</guid><description>&lt;h1 id="defer-and-closure-in-go-lang">Defer And Closure in Go-lang&lt;/h1>
+&lt;p>&lt;img src="https://miro.medium.com/0*bzYROhQxguUiBqgn" alt="Defer and Closure">&lt;/p>
+&lt;p>Hello, fellow internet user, before we begin, this article assumes you have the following pre-requisites:&lt;/p>
+&lt;ul>
+&lt;li>You know about functions in Go&lt;/li>
+&lt;li>Have an understanding of the local and global scope&lt;/li>
+&lt;li>Have your VS Code setup for Go-lang, because it&amp;rsquo;ll be a delightful experience with autocomplete, linting, and auto-imports
+With that out of the way, onto the main issue at hand, young padawan.&lt;/li>
+&lt;/ul>
+&lt;h2 id="just-what-is-defer-all-about">Just what is defer all about?&lt;/h2>
+&lt;p>Just so we&amp;rsquo;re on the same page, you &lt;strong>always&lt;/strong> use the &lt;code>defer&lt;/code> keyword on a function call. Now, what &lt;code>defer&lt;/code> means is that the execution of the deferred function is delayed till the end of the surrounding function.&lt;/p>
+&lt;p>&lt;img src="https://miro.medium.com/0*-FL_wSmKZokdvXVK" alt="Defer Example">&lt;/p>
+&lt;ul>
+&lt;li>In the code above, the deferred function is &lt;code>fmt.Println(&amp;quot;Two&amp;quot;)&lt;/code>, so this function will execute once the surrounding function is done executing. In our case, it was simply to print &lt;code>fmt.Println(&amp;quot;Three&amp;quot;)&lt;/code>. Once that is over, the deferred function is executed.&lt;/li>
+&lt;li>One thing to note is that if you have multiple &lt;code>defer&lt;/code> keywords in a single function, they will be executed in &lt;strong>First In Last Out (FILO)&lt;/strong> order, in simple words, the reverse order in which they were deferred.&lt;/li>
+&lt;li>Let&amp;rsquo;s go a little crazy for a second and add &lt;code>defer&lt;/code> keyword to everything you see. Try predicting the output.&lt;/li>
+&lt;/ul>
+&lt;p>&lt;img src="https://miro.medium.com/0*zk2MHqy6N9zf9ZvS" alt="Multiple Defer Example">&lt;/p>
+&lt;ul>
+&lt;li>In the code above, since everything is deferred, nothing is executed till the control reaches line 8. As &lt;code>fmt.Println(&amp;quot;Four&amp;quot;)&lt;/code> is the last function to be deferred, it is executed first. In other words, it doesn&amp;rsquo;t make much difference if you want to defer a function just before the surrounding function ends.&lt;/li>
+&lt;li>Since &lt;code>fmt.Println(&amp;quot;One&amp;quot;)&lt;/code> was first to be deferred, it was executed last.&lt;/li>
+&lt;li>&lt;strong>Things to note:&lt;/strong> The &lt;strong>deferred function belongs to the surrounding function&lt;/strong> and &lt;strong>not the block scope&lt;/strong>. So, if you deferred a function in an &lt;code>if&lt;/code> block or a &lt;code>for&lt;/code> loop, the deferred function will always execute after the surrounding function ends, not before the loop or if statement.&lt;/li>
+&lt;/ul>
+&lt;h2 id="okay-but-what-if-i-wanted-to-return-something-from-a-deferred-function">Okay, but what if I wanted to return something from a deferred function?&lt;/h2>
+&lt;ul>
+&lt;li>Well, you can&amp;rsquo;t do it. Your function needs to be the kind that returns nothing, or you can have a return and choose to defer it, but you&amp;rsquo;ll have to ignore the return value.&lt;/li>
+&lt;li>However, Go has this feature called &lt;a href="https://go.dev/tour/basics/7">named return&lt;/a>, which makes things a little interesting.&lt;/li>
+&lt;/ul>
+&lt;p>&lt;img src="https://miro.medium.com/0*33WkfCzsP6fs38qK" alt="Named Return Example">&lt;/p>
+&lt;ul>
+&lt;li>In the line above, when the function is created, &lt;code>returnVal&lt;/code> is 0. We&amp;rsquo;re deferring the anonymous function, so we jump to line 15. There, &lt;code>returnVal&lt;/code> becomes -1. Finally, our function is fired, and we overwrite &lt;code>returnVal&lt;/code> as 1000 and return that value.&lt;/li>
+&lt;/ul>
+&lt;h2 id="okay-now-for-closures">Okay, now for closures&lt;/h2>
+&lt;ul>
+&lt;li>Closures are function values that reference variables residing outside of the function in question.&lt;/li>
+&lt;li>This piece of code is shamelessly stolen from the Go &lt;a href="https://go.dev/tour/moretypes/25">docs&lt;/a> because it is actually that effective to understand.&lt;/li>
+&lt;/ul>
+&lt;p>&lt;img src="https://miro.medium.com/0*cmU6WpPNwkt7jWBA" alt="Closure Example">&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>Things to note:&lt;/strong> Despite having &lt;code>sum&lt;/code> defined outside the scope of the anonymous return function, the &lt;code>sum&lt;/code> variable is tied along with it, with a different copy every time &lt;code>adder()&lt;/code> is called.&lt;/li>
+&lt;li>Here, since each instance of the anonymous function (which happens to be &lt;code>pos(i int)&lt;/code> and &lt;code>neg(i int)&lt;/code>) can be called with a different parameter, they both have their own &lt;code>sum&lt;/code> variable under the hood, allowing them to have different outputs as shown.&lt;/li>
+&lt;/ul>
+&lt;h2 id="lets-mix-things-up">Let&amp;rsquo;s mix things up&lt;/h2>
+&lt;ul>
+&lt;li>It gets more interesting when you defer an anonymous function in a loop. As the function loses its meaning outside the scope of the loop, the compiler has to keep track of the deferred function calls in different ways. Have a look below.&lt;/li>
+&lt;/ul>
+&lt;p>&lt;img src="https://miro.medium.com/0*sStVU_ZKRd9CYZtV" alt="Defer in Loop Example">&lt;/p>
+&lt;ul>
+&lt;li>Here, VS Code shows that the &lt;strong>variable&lt;/strong> &lt;code>index&lt;/code> will be captured. That is to say, the address space &lt;code>index&lt;/code> is referring to will be tied to the function. That is why in the output, we see that &lt;code>captured index is 4&lt;/code> is printed 4 times—this is due to the closure concept.&lt;/li>
+&lt;li>But in the other loop (line 17), we store the &lt;strong>value&lt;/strong> that &lt;code>index&lt;/code> holds along with the function, as dictated by the &lt;a href="https://go.dev/ref/spec#Defer_statements">Go Spec&lt;/a>:&lt;/li>
+&lt;/ul>
+&lt;blockquote>
+&lt;p>&lt;em>Each time a &amp;ldquo;defer&amp;rdquo; statement executes, the function value and parameters to the call are evaluated as usual and saved anew, but the actual function is not invoked.&lt;/em>&lt;/p>&lt;/blockquote>
+&lt;p>Hope you learned something from this article! If there are any incorrect assumptions made on my behalf, please do tell 😊. Nothing would delight me more than dispelling my inaccurate understandings.&lt;/p>
+&lt;p>Meanwhile, here are some resources that helped me write this article:&lt;/p>
+&lt;ul>
+&lt;li>&lt;a href="https://blog.learngoprogramming.com/gotchas-of-defer-in-go-1-8d070894cb01">Another cool article on defer&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://news.ycombinator.com/item?id=14668955">This Y Combinator discussion was quite insightful&lt;/a>&lt;/li>
+&lt;li>I may or may not have taken things from this &lt;a href="https://stackoverflow.com/questions/16010694/how-golangs-defer-capture-closures-parameter">Stack Overflow question&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;p>Thanks for reading and hope you have a great day 😁&lt;/p></description></item><item><title>About</title><link>https://acjoshi.dev/about/</link><pubDate>Wed, 01 Jan 2025 00:00:00 +0000</pubDate><guid>https://acjoshi.dev/about/</guid><description>&lt;h1 id="about-me-">About Me ✨&lt;/h1>
 &lt;p>A backend-heavy full-stack developer who enjoys working on cloud applications and infrastructure. Proficient in &lt;strong>performance optimization, security vigilance, and automation&lt;/strong>. Currently diving deeper into &lt;strong>MCP&lt;/strong> for &lt;strong>AI&lt;/strong> to stay ahead in the ever-evolving tech space. Always ready for a new challenge and excited to innovate! 🤩🔥&lt;/p>
 &lt;h2 id="-technical-skills">🛠️ Technical Skills&lt;/h2>
 &lt;ul>
@@ -13,7 +374,13 @@
 &lt;li>&lt;strong>Version Control:&lt;/strong> Git 🔧, TFVC 📂&lt;/li>
 &lt;/ul>
 &lt;h2 id="-books-ive-read">📚 Books I&amp;rsquo;ve Read&lt;/h2>
-&lt;p>I enjoy reading both technical and non-technical books to broaden my knowledge and perspective. Some of my favorites include:&lt;/p></description></item><item><title/><link>https://acjoshi.dev/readme/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://acjoshi.dev/readme/</guid><description>&lt;h1 id="about-me-">About Me ✨&lt;/h1>
+&lt;p>I enjoy reading both technical and non-technical books to broaden my knowledge and perspective. Some of my favorites include:&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>Atomic Habits&lt;/strong> by James Clear 🏆 – A deep dive into habit formation and productivity.&lt;/li>
+&lt;li>&lt;strong>Head First Design Patterns&lt;/strong> by Eric Freeman &amp;amp; Elisabeth Robson 🎨 – A fun and engaging way to understand design patterns.&lt;/li>
+&lt;li>&lt;strong>Perfect Run&lt;/strong> by Maxime J. Durand 🔄 – A thrilling mix of strategy and action.&lt;/li>
+&lt;li>&lt;strong>Shadow Slave&lt;/strong> by Guiltythree 🦇 – An immersive and unique progression fantasy novel.&lt;/li>
+&lt;/ul></description></item><item><title/><link>https://acjoshi.dev/readme/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://acjoshi.dev/readme/</guid><description>&lt;h1 id="about-me-">About Me ✨&lt;/h1>
 &lt;p>A backend-heavy full-stack developer who enjoys working on cloud applications and infrastructure. Proficient in &lt;strong>performance optimization, security vigilance, and automation&lt;/strong>. Currently diving deeper into &lt;strong>MCP&lt;/strong> for &lt;strong>AI&lt;/strong> to stay ahead in the ever-evolving tech space. Always ready for a new challenge and excited to innovate! 🤩🔥&lt;/p>
 &lt;h2 id="-technical-skills">🛠️ Technical Skills&lt;/h2>
 &lt;ul>
@@ -28,4 +395,10 @@
 &lt;li>&lt;strong>Version Control:&lt;/strong> Git 🔧, TFVC 📂&lt;/li>
 &lt;/ul>
 &lt;h2 id="-books-ive-read">📚 Books I&amp;rsquo;ve Read&lt;/h2>
-&lt;p>I enjoy reading both technical and non-technical books to broaden my knowledge and perspective. Some of my favorites include:&lt;/p></description></item></channel></rss>
+&lt;p>I enjoy reading both technical and non-technical books to broaden my knowledge and perspective. Some of my favorites include:&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>Atomic Habits&lt;/strong> by James Clear 🏆 – A deep dive into habit formation and productivity.&lt;/li>
+&lt;li>&lt;strong>Head First Design Patterns&lt;/strong> by Eric Freeman &amp;amp; Elisabeth Robson 🎨 – A fun and engaging way to understand design patterns.&lt;/li>
+&lt;li>&lt;strong>Perfect Run&lt;/strong> by Maxime J. Durand 🔄 – A thrilling mix of strategy and action.&lt;/li>
+&lt;li>&lt;strong>Shadow Slave&lt;/strong> by Guiltythree 🦇 – An immersive and unique progression fantasy novel.&lt;/li>
+&lt;/ul></description></item></channel></rss>

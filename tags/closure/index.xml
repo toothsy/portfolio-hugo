@@ -1,1 +1,61 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Closure on Atharva CJ's place</title><link>https://acjoshi.dev/tags/closure/</link><description>Recent content in Closure on Atharva CJ's place</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Fri, 05 Dec 2025 03:00:18 +0000</lastBuildDate><atom:link href="https://acjoshi.dev/tags/closure/index.xml" rel="self" type="application/rss+xml"/><item><title>Golang Defer</title><link>https://acjoshi.dev/post/golang-defer/</link><pubDate>Sat, 29 Mar 2025 17:17:21 +0530</pubDate><guid>https://acjoshi.dev/post/golang-defer/</guid><description>This article covers the basics of defer and closure in golang.</description></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Closure on Atharva CJ's place</title><link>https://acjoshi.dev/tags/closure/</link><description>Recent content in Closure on Atharva CJ's place</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sat, 29 Mar 2025 17:17:21 +0530</lastBuildDate><atom:link href="https://acjoshi.dev/tags/closure/index.xml" rel="self" type="application/rss+xml"/><item><title>Golang Defer</title><link>https://acjoshi.dev/post/golang-defer/</link><pubDate>Sat, 29 Mar 2025 17:17:21 +0530</pubDate><guid>https://acjoshi.dev/post/golang-defer/</guid><description>&lt;h1 id="defer-and-closure-in-go-lang">Defer And Closure in Go-lang&lt;/h1>
+&lt;p>&lt;img src="https://miro.medium.com/0*bzYROhQxguUiBqgn" alt="Defer and Closure">&lt;/p>
+&lt;p>Hello, fellow internet user, before we begin, this article assumes you have the following pre-requisites:&lt;/p>
+&lt;ul>
+&lt;li>You know about functions in Go&lt;/li>
+&lt;li>Have an understanding of the local and global scope&lt;/li>
+&lt;li>Have your VS Code setup for Go-lang, because it&amp;rsquo;ll be a delightful experience with autocomplete, linting, and auto-imports
+With that out of the way, onto the main issue at hand, young padawan.&lt;/li>
+&lt;/ul>
+&lt;h2 id="just-what-is-defer-all-about">Just what is defer all about?&lt;/h2>
+&lt;p>Just so we&amp;rsquo;re on the same page, you &lt;strong>always&lt;/strong> use the &lt;code>defer&lt;/code> keyword on a function call. Now, what &lt;code>defer&lt;/code> means is that the execution of the deferred function is delayed till the end of the surrounding function.&lt;/p>
+&lt;p>&lt;img src="https://miro.medium.com/0*-FL_wSmKZokdvXVK" alt="Defer Example">&lt;/p>
+&lt;ul>
+&lt;li>In the code above, the deferred function is &lt;code>fmt.Println(&amp;quot;Two&amp;quot;)&lt;/code>, so this function will execute once the surrounding function is done executing. In our case, it was simply to print &lt;code>fmt.Println(&amp;quot;Three&amp;quot;)&lt;/code>. Once that is over, the deferred function is executed.&lt;/li>
+&lt;li>One thing to note is that if you have multiple &lt;code>defer&lt;/code> keywords in a single function, they will be executed in &lt;strong>First In Last Out (FILO)&lt;/strong> order, in simple words, the reverse order in which they were deferred.&lt;/li>
+&lt;li>Let&amp;rsquo;s go a little crazy for a second and add &lt;code>defer&lt;/code> keyword to everything you see. Try predicting the output.&lt;/li>
+&lt;/ul>
+&lt;p>&lt;img src="https://miro.medium.com/0*zk2MHqy6N9zf9ZvS" alt="Multiple Defer Example">&lt;/p>
+&lt;ul>
+&lt;li>In the code above, since everything is deferred, nothing is executed till the control reaches line 8. As &lt;code>fmt.Println(&amp;quot;Four&amp;quot;)&lt;/code> is the last function to be deferred, it is executed first. In other words, it doesn&amp;rsquo;t make much difference if you want to defer a function just before the surrounding function ends.&lt;/li>
+&lt;li>Since &lt;code>fmt.Println(&amp;quot;One&amp;quot;)&lt;/code> was first to be deferred, it was executed last.&lt;/li>
+&lt;li>&lt;strong>Things to note:&lt;/strong> The &lt;strong>deferred function belongs to the surrounding function&lt;/strong> and &lt;strong>not the block scope&lt;/strong>. So, if you deferred a function in an &lt;code>if&lt;/code> block or a &lt;code>for&lt;/code> loop, the deferred function will always execute after the surrounding function ends, not before the loop or if statement.&lt;/li>
+&lt;/ul>
+&lt;h2 id="okay-but-what-if-i-wanted-to-return-something-from-a-deferred-function">Okay, but what if I wanted to return something from a deferred function?&lt;/h2>
+&lt;ul>
+&lt;li>Well, you can&amp;rsquo;t do it. Your function needs to be the kind that returns nothing, or you can have a return and choose to defer it, but you&amp;rsquo;ll have to ignore the return value.&lt;/li>
+&lt;li>However, Go has this feature called &lt;a href="https://go.dev/tour/basics/7">named return&lt;/a>, which makes things a little interesting.&lt;/li>
+&lt;/ul>
+&lt;p>&lt;img src="https://miro.medium.com/0*33WkfCzsP6fs38qK" alt="Named Return Example">&lt;/p>
+&lt;ul>
+&lt;li>In the line above, when the function is created, &lt;code>returnVal&lt;/code> is 0. We&amp;rsquo;re deferring the anonymous function, so we jump to line 15. There, &lt;code>returnVal&lt;/code> becomes -1. Finally, our function is fired, and we overwrite &lt;code>returnVal&lt;/code> as 1000 and return that value.&lt;/li>
+&lt;/ul>
+&lt;h2 id="okay-now-for-closures">Okay, now for closures&lt;/h2>
+&lt;ul>
+&lt;li>Closures are function values that reference variables residing outside of the function in question.&lt;/li>
+&lt;li>This piece of code is shamelessly stolen from the Go &lt;a href="https://go.dev/tour/moretypes/25">docs&lt;/a> because it is actually that effective to understand.&lt;/li>
+&lt;/ul>
+&lt;p>&lt;img src="https://miro.medium.com/0*cmU6WpPNwkt7jWBA" alt="Closure Example">&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>Things to note:&lt;/strong> Despite having &lt;code>sum&lt;/code> defined outside the scope of the anonymous return function, the &lt;code>sum&lt;/code> variable is tied along with it, with a different copy every time &lt;code>adder()&lt;/code> is called.&lt;/li>
+&lt;li>Here, since each instance of the anonymous function (which happens to be &lt;code>pos(i int)&lt;/code> and &lt;code>neg(i int)&lt;/code>) can be called with a different parameter, they both have their own &lt;code>sum&lt;/code> variable under the hood, allowing them to have different outputs as shown.&lt;/li>
+&lt;/ul>
+&lt;h2 id="lets-mix-things-up">Let&amp;rsquo;s mix things up&lt;/h2>
+&lt;ul>
+&lt;li>It gets more interesting when you defer an anonymous function in a loop. As the function loses its meaning outside the scope of the loop, the compiler has to keep track of the deferred function calls in different ways. Have a look below.&lt;/li>
+&lt;/ul>
+&lt;p>&lt;img src="https://miro.medium.com/0*sStVU_ZKRd9CYZtV" alt="Defer in Loop Example">&lt;/p>
+&lt;ul>
+&lt;li>Here, VS Code shows that the &lt;strong>variable&lt;/strong> &lt;code>index&lt;/code> will be captured. That is to say, the address space &lt;code>index&lt;/code> is referring to will be tied to the function. That is why in the output, we see that &lt;code>captured index is 4&lt;/code> is printed 4 times—this is due to the closure concept.&lt;/li>
+&lt;li>But in the other loop (line 17), we store the &lt;strong>value&lt;/strong> that &lt;code>index&lt;/code> holds along with the function, as dictated by the &lt;a href="https://go.dev/ref/spec#Defer_statements">Go Spec&lt;/a>:&lt;/li>
+&lt;/ul>
+&lt;blockquote>
+&lt;p>&lt;em>Each time a &amp;ldquo;defer&amp;rdquo; statement executes, the function value and parameters to the call are evaluated as usual and saved anew, but the actual function is not invoked.&lt;/em>&lt;/p>&lt;/blockquote>
+&lt;p>Hope you learned something from this article! If there are any incorrect assumptions made on my behalf, please do tell 😊. Nothing would delight me more than dispelling my inaccurate understandings.&lt;/p>
+&lt;p>Meanwhile, here are some resources that helped me write this article:&lt;/p>
+&lt;ul>
+&lt;li>&lt;a href="https://blog.learngoprogramming.com/gotchas-of-defer-in-go-1-8d070894cb01">Another cool article on defer&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://news.ycombinator.com/item?id=14668955">This Y Combinator discussion was quite insightful&lt;/a>&lt;/li>
+&lt;li>I may or may not have taken things from this &lt;a href="https://stackoverflow.com/questions/16010694/how-golangs-defer-capture-closures-parameter">Stack Overflow question&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;p>Thanks for reading and hope you have a great day 😁&lt;/p></description></item></channel></rss>
