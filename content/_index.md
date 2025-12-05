@@ -2,6 +2,7 @@
 title: "Experience"
 date: 2025-01-01
 draft: false
+rss_ignore: true
 ---
 
 **Backend & Cloud Engineer** with 3+ years building scalable Golang microservices, full-stack React applications, and cloud infrastructure. Focused on performance optimization, security, and ML infrastructure. Currently working on GPU-based inference services with gRPC and AWS.

@@ -66,9 +66,8 @@ So your app only has to implement OIDC process for Dex, Dex will take care of th
 <p/>
 
 - [jwt.io](https://jwt.io) would be your goto page for your jwt needs.
--
 - NOTE:
-  - never share your refresh tokens as that would mean client can keep refreshing their tokens till refresh tokens expire, which are usually long lived.
+  - Always share a opaque session id string that would be tied to your refresh token, never share your refresh tokens as that would mean client can keep refreshing their tokens till refresh tokens expire, which are usually like week long.
   - access tokens are for applications to access resources that are consented to be accessed by the user like email,or your google photos.
 
 ## Local connector
