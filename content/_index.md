@@ -5,7 +5,7 @@ draft: false
 rss_ignore: true
 ---
 
-**Backend & Cloud Engineer** with 3+ years building scalable Golang microservices, full-stack React applications, and cloud infrastructure. Focused on performance optimization, security, and ML infrastructure. Currently working on GPU-based inference services with gRPC and AWS.
+**Backend Engineer** with experience in building scalable Golang microservices, full-stack React applications, and cloud infrastructure. Focused on performance optimization, security, and ML infrastructure. Currently working on GPU-based inference services with gRPC and AWS.
 
 *India-based • Open to remote work with European teams*
 
@@ -36,24 +36,31 @@ rss_ignore: true
 
 ---
 
-## Professional Experience
+### Gruve.ai  
 
-**Gruve.ai** | Software Engineer - 2 | May 2025 - Present
-- Reduced backend endpoint response times from 20s to 3s through concurrent processing architecture in Golang
-- Built authentication layer using OIDC and Dex for GPU-based ML inference service
+**Software Engineer – 2** | May 2025 – Present  
+
+- Designed and implemented an OTP-based authentication system by integrating **Dex (OIDC provider)** with **Redis**, extending the identity broker to support multi-factor authentication flows  
+- Engineered a **token revocation mechanism** by bridging Dex’s OIDC implementation with an internal RBAC manager, addressing missing functionality in the upstream open-source stack  
+- Architected the **authentication and authorization domain (AuthX)** in collaboration with principal engineers and the founding team, managing token lifecycle, session state, and RBAC enforcement across microservices  
+- Built and demonstrated **end-to-end PoCs and internal demos**, leveraging **LLM-assisted development** to accelerate API design, backend implementation, and test scaffolding under tight timelines  
+- Resolved a critical production bug causing platform-wide authentication failures, restoring service availability and preventing user lockout.
 
 **Optum, UnitedHealth Group** | Software Engineer | Sep 2023 - Apr 2025
+
 - Built Golang-ReactJS application replacing legacy IBM product, saving $80k in annual licensing costs
 - Led security remediation initiative reducing 400+ critical/high vulnerabilities across production systems
 - Migrated CI/CD infrastructure to GitHub Actions, halving deployment times while reducing infrastructure costs
 - Developed authentication layer with OAuth2 and role-based access control for internal deployment tools
 
 **Optum, UnitedHealth Group** | Associate Software Engineer | Sep 2022 - Sep 2023
+
 - Led enterprise migration from Team Foundation Version Control to GitHub Enterprise Cloud
 - Rebuilt CI/CD pipelines in GitHub Actions, reducing Azure DevOps infrastructure dependency
 - Automated workflow tasks using Linux scripting and GitHub REST API
 
 **State Street** | Software Engineering Intern | Jan 2022 - Jun 2022
+
 - Built Golang CLI tools for workflow automation
 
 ---
