@@ -5,7 +5,7 @@ draft: false
 rss_ignore: true
 ---
 
-**Backend Engineer** with experience in building scalable Golang microservices, full-stack React applications, and cloud infrastructure. Focused on performance optimization, security, and ML infrastructure. Currently working on GPU-based inference services with gRPC and AWS.
+**Backend/Infrastructure Engineer** focused on policy-based authZ systems (OPA/Envoy), ML inference infrastructure on GPU clusters, and distributed Go services. Currently building GPU-based inference services with gRPC and cloud providers(AWS/GCP).
 
 *India-based • Open to remote work with European teams*
 
@@ -45,6 +45,11 @@ rss_ignore: true
 - Architected the **authentication and authorization domain (AuthX)** in collaboration with principal engineers and the founding team, managing token lifecycle, session state, and RBAC enforcement across microservices  
 - Built and demonstrated **end-to-end PoCs and internal demos**, leveraging **LLM-assisted development** to accelerate API design, backend implementation, and test scaffolding under tight timelines  
 - Resolved a critical production bug causing platform-wide authentication failures, restoring service availability and preventing user lockout.
+- Redesigned the authentication/authorization stack around **OPA** as sidecar policy decision point with **Envoy ext_authz** as the enforcement layer and **Postgres RLS** as a defense-in-depth backstop; separated policy (Rego, CI-built bundles) from live binding data served via a bundle server
+- Designed **EntitlementService** as the policy administration/information point, owning RBAC binding writes independent of tenant lifecycle — decoupling `tenant_id` (billing scope) from `org_id` (authZ scope)
+- Built JWT refresh-token architecture with `jti`-based rotation, **token-family reuse detection**, and family-wide revocation for gRPC clients, including proactive/reactive refresh strategies
+- Led an **Alluxio Enterprise AI** POC as an S3 caching layer for vLLM model-weight loading on an H200 GPU cluster (8×H200/node, NVMe RAID5); root-caused etcd WAL fsync contention, JVM direct-buffer exhaustion under concurrent large reads, and TLS/zero-copy port conflicts in the S3 proxy
+- Built a Go benchmarking harness (baseline, cache-miss, cache-hit, prefetch, concurrency) across 7B–70B model sizes, comparing RunAI Streamer against S3 vs. Alluxio-cached loads
 
 **Optum, UnitedHealth Group** (Remote)| Software Engineer | Sep 2023 - Apr 2025
 
@@ -67,37 +72,21 @@ rss_ignore: true
 
 ## My Journey in Software Engineering
 
-I've spent the past few years building backend systems, automating infrastructure, and solving problems that matter. My journey started with a simple CLI tool during an internship and has evolved into architecting solutions that save companies money and make systems faster.
+I've spent the past few years building backend systems, automating infrastructure, and solving problems that matter. My journey started with a Go CLI tool during an internship at State Street, evolved through leading enterprise migrations and security remediation at Optum, and now focuses on architecting production-grade authZ platforms with OPA/Envoy and optimizing ML inference infrastructure on GPU clusters at Gruve.ai.
 
-Early in my career, I contributed to a research project on gravitational wave detection using distributed systems—a brief academic detour that taught me how to think about large-scale data processing. But my real passion has always been in production engineering.
+I've always believed in engineering systems that are both practical and robust — whether that's replacing a legacy IBM product to save $80k/year in licensing, designing token-family rotations with reuse detection, or root-causing etcd WAL fsync contention on an H200 cluster.
 
-### Backend Engineering
+---
 
-My first taste of Go came at State Street, where I built CLI tools that automated routine workflow tasks. The immediate impact was addictive—watching manual processes disappear made me realize I wanted to spend my career doing this.
+## Key Projects
 
-At Optum, I got the opportunity to prove that we didn't need expensive third-party licensing for everything. I built a Golang-ReactJS application that replaced a legacy IBM product and became the team's daily driver for managing deployment workflows.
+### Multi-tenant AuthZ Platform
 
-Most recently at Gruve.ai, I tackled a performance problem that had been plaguing the backend. By implementing concurrent processing in Go, I transformed sluggish endpoints into responsive ones that made the product actually usable under load.
+Architected a production-grade authentication/authorization system for a multi-service gRPC platform: OPA as policy decision point, Envoy ext_authz enforcement, EntitlementService as the single writer of RBAC bindings, and Postgres RLS as backstop. Designed token-family-based refresh rotation with single-use semantics and reuse detection for revocation.
 
-### DevOps & Cloud Migration
+### ML Weight-Caching Infrastructure (Alluxio + vLLM)
 
-One of my biggest projects at Optum was migrating our entire codebase from Team Foundation Version Control (TFVC) to GitHub Enterprise Cloud. This wasn't just a git migration—it involved rewriting CI/CD pipelines, retraining teams, and ensuring zero downtime during the transition. Working with distributed teams across regions, I learned the importance of clear documentation and async communication. The result: faster pipelines and a modern version control system that developers actually wanted to use.
-
-I followed that up by migrating our Azure DevOps pipelines to GitHub Actions, which cut infrastructure costs and reduced deployment times significantly. Turns out, being hands-on with Linux scripting and the GitHub API makes you dangerous when it comes to automation.
-
-I also implemented OAuth2 authentication with role-based access control (RBAC) for internal tools, because security shouldn't be an afterthought when you're managing production deployments.
-
-### Frontend & Full-Stack Development
-
-Backend engineers who can build UIs are more valuable, so I learned ReactJS and TypeScript to build complete solutions. At Optum, I improved frontend performance through better data fetching patterns and optimized the application to reduce server storage costs.
-
-The frontend isn't just about making things pretty—it's about making data accessible quickly and presenting complex operations in ways that don't confuse users. RBAC integration meant users saw exactly what they were authorized to see, nothing more.
-
-### Quality & Security
-
-I take testing seriously. At Optum, I consistently pushed test coverage higher, starting at good levels and reaching excellent coverage during my associate role. Code without tests is technical debt waiting to explode.
-
-Security was another focus: I systematically reduced our vulnerability count through dependency updates and code audits. Production issues dropped after implementing better monitoring and incident response processes.
+Operated and debugged an Alluxio Enterprise AI 3.8 deployment caching S3-hosted model weights for vLLM inference on H200 GPUs. Diagnosed etcd/worker I/O contention on shared RAID5, fixed TLS/zero-copy mutual exclusivity on the S3 proxy, and built topology-aware routing for cache locality.
 
 ---
 
@@ -105,20 +94,20 @@ Security was another focus: I systematically reduced our vulnerability count thr
 
 **Languages & Frameworks**: Golang • JavaScript/TypeScript • ReactJS • Python
 
-**Databases**: PostgreSQL • MySQL • MSSQL
+**Databases**: PostgreSQL (RLS) • MySQL • MSSQL
 
-**DevOps & Cloud**: AWS • Docker • Kubernetes • GitHub Actions • Azure DevOps • Linux Scripting • PowerShell
+**DevOps & Cloud**: AWS • Docker • Kubernetes • GitHub Actions • Azure DevOps • Linux Scripting • PowerShell • Bazel/Bzlmod
 
-**Architecture & Patterns**: gRPC • REST APIs • Microservices • Distributed Systems
+**Architecture & Patterns**: gRPC • REST APIs • Microservices • Distributed Systems • OPA/Rego • Envoy ext_authz • Alluxio • etcd • vLLM
 
 **Tools & Platforms**: Git • GitHub API • NodeJS • Webpack • CI/CD Pipelines • Ubuntu
 
-**Focus Areas**: Backend Systems • Performance Optimization • Cloud Migration • Security & Vulnerability Management • Test Automation
+**Focus Areas**: Backend Systems • AuthZ Platforms • ML Inference Infrastructure • Performance Optimization • Cloud Migration • Security & Vulnerability Management
 
 ---
 
 ## Let's Connect
 
-Open to backend and cloud engineering roles focused on Golang, Kubernetes, and performance optimization.
+Open to backend, infrastructure, and ML-infra engineering roles focused on Go, Kubernetes, authZ platforms, and performance optimization.
 
 **Reach out via [LinkedIn](https://linkedin.com/in/c-j-atharva), [Bluesky](https://bsky.app/profile/cjatharva.bsky.social), or [GitHub](https://github.com/toothsy)**
