@@ -5,9 +5,11 @@ draft: false
 rss_ignore: true
 ---
 
-**Backend/Infrastructure Engineer** focused on policy-based authZ systems (OPA/Envoy), ML inference infrastructure on GPU clusters, and distributed Go services. Currently building GPU-based inference services with gRPC and cloud providers(AWS/GCP).
+**Master's student in Computer Science at RPTU Kaiserslautern-Landau, Germany** (started October 2026, expected 2028). Backend engineer focused on policy-based authZ systems (OPA/Envoy), ML inference infrastructure on GPU clusters, and distributed Go services. Previously built GPU-based inference services with gRPC and cloud providers(AWS/GCP).
 
-*India-based • Open to remote work with European teams*
+*Kaiserslautern, Germany (CET/CEST) • Open to Werkstudent roles in Germany*
+
+**Open to Werkstudent (student worker) roles in Germany** — software engineering, backend, distributed systems, or identity/auth-related roles preferred.
 
 ---
 
@@ -28,7 +30,7 @@ rss_ignore: true
     <span class="timeline-role">Software Engineer</span>
   </div>
   <div class="timeline-item">
-    <span class="timeline-date">May 2025 - Present</span>
+    <span class="timeline-date">May 2025 - Sep 2026</span>
     <span class="timeline-company">Gruve.ai(Hybrid)</span>
     <span class="timeline-role">Software Engineer - 2</span>
   </div>
@@ -38,7 +40,7 @@ rss_ignore: true
 
 ### Gruve.ai  
 
-**Software Engineer – 2** (Hybrid)| May 2025 – Present  
+**Software Engineer – 2** (Hybrid, Bangalore, India)| May 2025 – Sep 2026  
 
 - Designed and implemented an OTP-based authentication system by integrating **Dex (OIDC provider)** with **Redis**, extending the identity broker to support multi-factor authentication flows  
 - Engineered a **token revocation mechanism** by bridging Dex’s OIDC implementation with an internal RBAC manager, addressing missing functionality in the upstream open-source stack  
@@ -51,14 +53,14 @@ rss_ignore: true
 - Led an **Alluxio Enterprise AI** POC as an S3 caching layer for vLLM model-weight loading on an H200 GPU cluster (8×H200/node, NVMe RAID5); root-caused etcd WAL fsync contention, JVM direct-buffer exhaustion under concurrent large reads, and TLS/zero-copy port conflicts in the S3 proxy
 - Built a Go benchmarking harness (baseline, cache-miss, cache-hit, prefetch, concurrency) across 7B–70B model sizes, comparing RunAI Streamer against S3 vs. Alluxio-cached loads
 
-**Optum, UnitedHealth Group** (Remote)| Software Engineer | Sep 2023 - Apr 2025
+**Optum, UnitedHealth Group** (Remote, Bangalore, India)| Software Engineer | Sep 2023 - Apr 2025
 
 - Built Golang-ReactJS application replacing legacy IBM product, saving $80k in annual licensing costs
 - Led security remediation initiative reducing 400+ critical/high vulnerabilities across production systems
 - Migrated CI/CD infrastructure to GitHub Actions, halving deployment times while reducing infrastructure costs
 - Developed authentication layer with OAuth2 and role-based access control for internal deployment tools
 
-**Optum, UnitedHealth Group** (Remote)| Associate Software Engineer | Sep 2022 - Sep 2023
+**Optum, UnitedHealth Group** (Remote, Bangalore, India)| Associate Software Engineer | Sep 2022 - Sep 2023
 
 - Led enterprise migration from Team Foundation Version Control to GitHub Enterprise Cloud
 - Rebuilt CI/CD pipelines in GitHub Actions, reducing Azure DevOps infrastructure dependency
@@ -72,7 +74,7 @@ rss_ignore: true
 
 ## My Journey in Software Engineering
 
-I've spent the past few years building backend systems, automating infrastructure, and solving problems that matter. My journey started with a Go CLI tool during an internship at State Street, evolved through leading enterprise migrations and security remediation at Optum, and now focuses on architecting production-grade authZ platforms with OPA/Envoy and optimizing ML inference infrastructure on GPU clusters at Gruve.ai.
+I've spent the past few years building backend systems, automating infrastructure, and solving problems that matter. My journey started with a Go CLI tool during an internship at State Street, evolved through leading enterprise migrations and security remediation at Optum, and most recently focused on architecting production-grade authZ platforms with OPA/Envoy and optimizing ML inference infrastructure on GPU clusters at Gruve.ai.
 
 I've always believed in engineering systems that are both practical and robust — whether that's replacing a legacy IBM product to save $80k/year in licensing, designing token-family rotations with reuse detection, or root-causing etcd WAL fsync contention on an H200 cluster.
 
@@ -108,6 +110,6 @@ Operated and debugged an Alluxio Enterprise AI 3.8 deployment caching S3-hosted 
 
 ## Let's Connect
 
-Open to backend, infrastructure, and ML-infra engineering roles focused on Go, Kubernetes, authZ platforms, and performance optimization.
+Open to Werkstudent (student worker) roles in Germany — software engineering, backend, distributed systems, or identity/auth-related roles preferred.
 
 **Reach out via [LinkedIn](https://linkedin.com/in/c-j-atharva), [Bluesky](https://bsky.app/profile/cjatharva.bsky.social), or [GitHub](https://github.com/toothsy)**

@@ -66,6 +66,7 @@
 
         <div class="p-note user-profile-bio mb-3 js-user-profile-bio f4">
           <div>{{ .Site.Params.Description }}</div>
+          <div>Open to Werkstudent roles in Germany (CET/CEST)</div>
         </div>
 
         <div class="d-flex flex-column">
@@ -197,7 +198,7 @@
 <script>
   (function() {
     var start = new Date('2022-01-01');
-    var now = new Date();
+    var now = new Date('2026-09-30'); // experience capped at Sep 2026 — update when a new role starts
     var totalMonths = (now.getFullYear() - start.getFullYear()) * 12 + (now.getMonth() - start.getMonth());
     var years = Math.floor(totalMonths / 12);
     var months = totalMonths % 12;
